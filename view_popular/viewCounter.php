@@ -20,11 +20,6 @@
     * @return integer $new_views The number of views the post has
     *
     */
-
-    if (function_exists("awepop_popularity_list")) {
-   awepop_popularity_list();
-}
-
    function awepop_add_view() {
       if(is_single()) {
          global $post;
@@ -60,6 +55,8 @@
       return $current_views;
    }
 
+
+
    /**
  * Shows the number of views for a post
  *
@@ -92,6 +89,7 @@ function awepop_show_views($singular = "view", $plural = "views", $before = "Thi
 
 }
 
+add_action("wp_head", "awepop_show_views");
 
 /**
  * Displays a list of posts ordered by popularity
@@ -122,9 +120,5 @@ function awepop_show_views($singular = "view", $plural = "views", $before = "Thi
   if($awepop_list->have_posts()) { echo "</ul>";}
  }
 
-
- if (function_exists("awepop_popularity_list")) {
-    awepop_popularity_list();
- }
 
 ?>
