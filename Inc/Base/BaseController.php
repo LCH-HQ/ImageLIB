@@ -17,6 +17,7 @@ class BaseController
 	
 	public $plugin;
 
+	// Definieer de directory-paden en stop deze in een public variabele
 	public function __construct() {
 		$this->plugin_pad = plugin_dir_path( dirname( __FILE__, 2 ) );
 		$this->plugin_url = plugin_dir_url( dirname( __FILE__, 2 ) );

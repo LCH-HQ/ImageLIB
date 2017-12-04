@@ -9,13 +9,13 @@ namespace Inc\Pages;
  * Genereer een sectie voor SpaceBooker in de WordPress back-end
  */
 
+// Paden definiëren voor de classes
 use Inc\Base\BaseController;
 use Inc\Api\InstellingenApi;
 use Inc\Api\Callbacks\AdminCallbacks;
 
 class Admin extends BaseController
 {
-
 	public $instellingen;
 
 	public $callbacks;
@@ -24,6 +24,7 @@ class Admin extends BaseController
 
 	public $subpaginas = array();
 
+	// Verwerk de pagina, subpagina's en content en push deze naar de back-end
 	public function registreren() 
 	{ 
 		$this->instellingen = new InstellingenApi();
@@ -41,6 +42,7 @@ class Admin extends BaseController
 		$this->instellingen->paginasToevoegen( $this->paginas )->metSubPagina( 'Dashboard' )->subPaginasToevoegen( $this->subpaginas)->registreren();
 	}
 
+	// Genereer de pagina van SpaceBooker voor de back-end
 	public function plaatsPaginas() 
 	{
 		$this->paginas = array(
@@ -56,6 +58,7 @@ class Admin extends BaseController
 		);
 	}
 
+	// Genereer de subpagina's voor SpaceBooker voor de back-end
 	public function plaatsSubPaginas() 
 	{
 		$this->subpaginas = array(
@@ -86,6 +89,11 @@ class Admin extends BaseController
 		);
 	}
 
+	/*
+	 * Genereer de custom fields voor de plug-in in de back-end
+	 */
+
+	// Stel de instellingen in voor de custom fields
 	public function stelInstellingenIn() 
 	{
 		$args = array(
@@ -99,6 +107,7 @@ class Admin extends BaseController
 		$this->instellingen->stelInstellingenIn( $args );
 	}
 
+	// Stel de secties in waar de custom fields in geplaatst worden
 	public function stelSectiesIn() 
 	{
 		$args = array(
@@ -115,6 +124,8 @@ class Admin extends BaseController
 		$this->instellingen->stelSectiesIn( $args );
 	}
 
+	// Stel de velden (van inputs naar dropdowns) in voor de secties
+	// en plaats deze in de secties van de subpagina's 
 	public function stelVeldenIn() 
 	{
 		$args = array(

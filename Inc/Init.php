@@ -5,8 +5,13 @@
 
 namespace Inc;
 
+/*
+ * Initialiseren van de plug-in
+ */
+
 final class Init
 {
+	// Activeer de service classes
 	public static function haalServicesOp() {
 		return [
 			Pages\Admin::class,
@@ -15,7 +20,7 @@ final class Init
 		];
 	}
 
-
+	// Lokaliseer de services om deze te starten
 	public static function registreerServices() {
 		foreach ( self::haalServicesOp() as $class ) {
 			$service = self::instantieren( $class );
@@ -25,6 +30,7 @@ final class Init
 		}
 	}
 
+	// Roep de services aan om ze te kunnen starten
 	private static function instantieren( $class ) {
 		$service = new $class();
 

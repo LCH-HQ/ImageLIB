@@ -33,6 +33,11 @@ class AdminCallbacks extends BaseController
 		return require_once( "$this->plugin_pad/templates/Gebruikers.php");
 	}
 
+	/*
+	 * Verwerk alle data van de custom fields voor de plug-in
+	 * Bekijk de Inc/Pages/Admin.php voor alle data
+	 */
+
 	public function optieGroepVoorbeeld( $input )
 	{
 		return $input;

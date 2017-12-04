@@ -39,7 +39,7 @@ function deactiveerSpaceBooker() {
 }
 register_deactivation_hook( __FILE__, 'deactiveerSpaceBooker');
 
-// Als het initalisatie-bestand beschikbaar is, voer alle plug-in services uit
+// Als de initalisatie-class beschikbaar is, voer alle plug-in services uit
 if ( class_exists( 'Inc\\Init') ) {
 	Inc\Init::registreerServices();
 }
