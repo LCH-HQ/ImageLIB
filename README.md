@@ -1,2 +1,1 @@
-# ImageLIB
-Wordpress plugin - image libraries
+# pluginSpacebooker

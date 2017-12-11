@@ -7,8 +7,16 @@
 	<form method="post" action="options.php">
 		<?php
 			settings_fields( 'optie_groep_voorbeeld' );
+
+			settings_fields( 'optie_groep_voorbeeld2' );
 			do_settings_sections( 'spacebooker' );
+
+
+
 			submit_button();
 		?>
 	</form>
+
+
+
 </div>

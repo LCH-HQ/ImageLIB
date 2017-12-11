@@ -52,4 +52,19 @@ class AdminCallbacks extends BaseController
 		$waarde = esc_attr( get_option( 'tekst_voorbeeld' ) );
 		echo '<input type="text" class="regular-text" name="tekst_voorbeeld" value="' . $waarde . '" placeholder="Dit is de placeholder">';
 	}
+
+//dropdown optie
+	public function spaceBookerDropdown() {
+		$waarde = esc_attr( get_option( 'tekst_voorbeeld2' ) );
+//		echo '<input type="text" class="regular-text" name="tekst_voorbeeld" value="' . $waarde . '" placeholder="Dit is de placeholder dropdown">';
+
+		echo '<select class="regular-text" name="tekst_voorbeeld">
+					<option value="' .$waarde . '">optie 1</option>
+					<option value="' .$waarde . '">optie 2</option>
+					<option value="' .$waarde . '">optie 3</option>
+					</select>';
+// submit knop maken laatste gekozen optie onthouden in de admin panel  + controleren of de opties die gekozen zijn in de de tables van wp terecht komen en welke (sequel pro)
+
+	}
+
 }

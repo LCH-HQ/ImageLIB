@@ -25,11 +25,11 @@ class Admin extends BaseController
 	public $subpaginas = array();
 
 	// Verwerk de pagina, subpagina's en content en push deze naar de back-end
-	public function registreren() 
-	{ 
+	public function registreren()
+	{
 		$this->instellingen = new InstellingenApi();
 
-		$this->callbacks = new AdminCallbacks(); 
+		$this->callbacks = new AdminCallbacks();
 
 		$this->plaatsPaginas();
 
@@ -43,7 +43,7 @@ class Admin extends BaseController
 	}
 
 	// Genereer de pagina van SpaceBooker voor de back-end
-	public function plaatsPaginas() 
+	public function plaatsPaginas()
 	{
 		$this->paginas = array(
 			array(
@@ -59,7 +59,7 @@ class Admin extends BaseController
 	}
 
 	// Genereer de subpagina's voor SpaceBooker voor de back-end
-	public function plaatsSubPaginas() 
+	public function plaatsSubPaginas()
 	{
 		$this->subpaginas = array(
 			array(
@@ -94,7 +94,7 @@ class Admin extends BaseController
 	 */
 
 	// Stel de instellingen in voor de custom fields
-	public function stelInstellingenIn() 
+	public function stelInstellingenIn()
 	{
 		$args = array(
 			array(
@@ -102,13 +102,21 @@ class Admin extends BaseController
 				'option_name' => 'tekst_voorbeeld',
 				'callback' => array( $this->callbacks, 'optieGroepVoorbeeld' )
 			)
+,
+array(
+	'option_group' => 'optie_groep_voorbeeld2',
+	'option_name' => 'tekst_voorbeeld',
+	'callback' => array( $this->callbacks, 'optieGroepVoorbeeld' )
+)
+
+
 		);
 
 		$this->instellingen->stelInstellingenIn( $args );
 	}
 
 	// Stel de secties in waar de custom fields in geplaatst worden
-	public function stelSectiesIn() 
+	public function stelSectiesIn()
 	{
 		$args = array(
 			array(
@@ -117,7 +125,6 @@ class Admin extends BaseController
 				'callback' => array( $this->callbacks, 'optieGroepSectie'),
 				// Gebruik hiervoor de menu_slug van de (sub)pagina
 				'page' => 'spacebooker'
-
 			)
 		);
 
@@ -125,8 +132,8 @@ class Admin extends BaseController
 	}
 
 	// Stel de velden (van inputs naar dropdowns) in voor de secties
-	// en plaats deze in de secties van de subpagina's 
-	public function stelVeldenIn() 
+	// en plaats deze in de secties van de subpagina's
+	public function stelVeldenIn()
 	{
 		$args = array(
 			array(
@@ -143,6 +150,25 @@ class Admin extends BaseController
 					'class' => 'voorbeeld_class'
 				)
 			)
+
+,
+array(
+	// Moet identiek zijn aan de naam van de option_name in stelInstellingenIn();
+	'id' => 'tekst_voorbeeld2',
+	'title' => 'Dit is de titel van het invoerveld',
+	'callback' => array( $this->callbacks, 'spaceBookerDropdown'),
+	// Gebruik hiervoor de menu_slug van de (sub)pagina
+	'page' => 'spacebooker',
+	// Moet identiek zijn aan de id van stelSectiesIn();
+	'section' => 'sectie_id_voorbeeld',
+	'args' => array(
+		'label_for' => 'tekst_voorbeeld',
+		'class' => 'voorbeeld_class'
+	)
+)
+
+
+
 		);
 
 		$this->instellingen->stelVeldenIn( $args );
