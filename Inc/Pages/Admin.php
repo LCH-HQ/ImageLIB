@@ -40,6 +40,9 @@ class Admin extends BaseController
 		$this->stelVeldenIn();
 
 		$this->instellingen->paginasToevoegen( $this->paginas )->metSubPagina( 'Dashboard' )->subPaginasToevoegen( $this->subpaginas)->registreren();
+
+		// Activeer submenu voor Ruimtes
+		add_action('admin_menu', array( $this, 'activeerRuimteCPT') ); 
 	}
 
 	// Genereer de pagina van SpaceBooker voor de back-end
@@ -64,14 +67,6 @@ class Admin extends BaseController
 		$this->subpaginas = array(
 			array(
 				'parent_slug' => 'spacebooker',
-				'page_title' => 'Ruimtes beheren',
-				'menu_title' => 'Ruimtes',
-				'capability' => 'manage_options',
-				'menu_slug' => 'spacebooker_ruimtes',
-				'callback' => array( $this->callbacks, 'adminRuimtes')
-			),
-			array(
-				'parent_slug' => 'spacebooker',
 				'page_title' => 'Reserveringen',
 				'menu_title' => 'Reserveringen',
 				'capability' => 'manage_options',
@@ -87,6 +82,44 @@ class Admin extends BaseController
 				'callback' => array( $this->callbacks, 'adminGebruikers')
 			)
 		);
+	}
+
+	/*
+	 * Genereer CPT voor de ruimtes
+	 */
+
+	public function activeerRuimteCPT() {
+
+		$enkelvoud = 'ruimte';
+		$meervoud = 'ruimtes';
+
+		register_post_type( 'ruimte',
+		    array(
+		            'labels' => array(
+		                    'name' => __( 'Ruimtes' ),
+		                    'singular_name' => __( 'Ruimte' ),
+		                    'add_new_item' => ( "Nieuwe $enkelvoud toevoegen" ),
+		                    'edit_item' => ( "Bewerk $enkelvoud" ),
+		                    'new_item' => ( "Nieuwe $enkelvoud" ),
+		                    'view_item' => ( "Bekijk $enkelvoud" ),
+		                    'view_items' => ( "Bekijk $meervoud" ),
+		                    'search_items' => ( "Zoeken naar $meervoud" ),
+		                    'not_found' => ( "Geen $meervoud gevonden" ),
+		                    'not_found_in_trash' => ( "Geen $meervoud gevonden in de prullenbak" ),
+		                    'all_items' => ( "Alle $meervoud" ),
+		                    'archives' => ( "Archief voor $meervoud" ),
+		                    'attributes' => ( "Attributen voor $meervoud"),
+		                    'insert_into_item' => ( "Voeg in $enkelvoud" ),
+		                    'uploaded_to_this_item' => ( "Geüpload naar deze $enkelvoud" )
+		            ),
+		    'public' => true,
+		    'has_archive' => true,
+		    'menu-position' => 5,
+		    'show_in_menu' => 'spacebooker',
+		    'supports' => array('title', 'custom-fields', 'page-attributes', 'post-formats')
+		    )
+		);
+		add_submenu_page('spacebooker', 'Ruimtes beheren', 'Ruimtes', 'manage_options', 'edit.php?post_type=ruimte');
 	}
 
 	/*
@@ -117,7 +150,6 @@ class Admin extends BaseController
 				'callback' => array( $this->callbacks, 'optieGroepSectie'),
 				// Gebruik hiervoor de menu_slug van de (sub)pagina
 				'page' => 'spacebooker'
-
 			)
 		);
 
@@ -133,6 +165,20 @@ class Admin extends BaseController
 				// Moet identiek zijn aan de naam van de option_name in stelInstellingenIn();
 				'id' => 'tekst_voorbeeld',
 				'title' => 'Dit is de titel van het invoerveld',
+				'callback' => array( $this->callbacks, 'spaceBookerTekstveldVoorbeeld'),
+				// Gebruik hiervoor de menu_slug van de (sub)pagina
+				'page' => 'spacebooker',
+				// Moet identiek zijn aan de id van stelSectiesIn();
+				'section' => 'sectie_id_voorbeeld',
+				'args' => array(
+					'label_for' => 'tekst_voorbeeld',
+					'class' => 'voorbeeld_class'
+				)
+			),
+			array(
+				// Moet identiek zijn aan de naam van de option_name in stelInstellingenIn();
+				'id' => 'tekst_voorbeeld',
+				'title' => 'Dit is de titel van de dropdown',
 				'callback' => array( $this->callbacks, 'spaceBookerTekstveldVoorbeeld'),
 				// Gebruik hiervoor de menu_slug van de (sub)pagina
 				'page' => 'spacebooker',
