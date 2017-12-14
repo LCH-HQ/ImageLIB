@@ -113,12 +113,17 @@ class Admin extends BaseController
 		                    'uploaded_to_this_item' => ( "Geüpload naar deze $enkelvoud" )
 		            ),
 		    'public' => true,
+		    'publicly_queryable' => true,
 		    'has_archive' => true,
 		    'menu-position' => 5,
+		    'capability_type' => 'post',
 		    'show_in_menu' => 'spacebooker',
+		    'map_meta_cap' => true,
+		    'rewrite' => array( 'slug' => 'ruimtes', 'with_front' => true, 'pages' => true, 'feeds' => true),
 		    'supports' => array('title', 'custom-fields', 'page-attributes', 'post-formats')
 		    )
 		);
+
 		add_submenu_page('spacebooker', 'Ruimtes beheren', 'Ruimtes', 'manage_options', 'edit.php?post_type=ruimte');
 	}
 
