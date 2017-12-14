@@ -28,11 +28,11 @@ class InstellingenApi
 
 	// In het geval dat de pagina's en instellingen niet leeg zijn,
 	// update de gegevens van de pagina's en de custom fields
-	public function registreren() 
+	public function registreren()
 	{
 		if ( ! empty($this->admin_paginas) ) {
 			add_action( 'admin_menu', array( $this, 'adminMenuToevoegen') );
-		} 
+		}
 
 		if ( ! empty($this->instellingen) ) {
 			add_action( 'admin_init', array( $this, 'registreerCustomFields' ) );
@@ -40,7 +40,7 @@ class InstellingenApi
 	}
 
 	// Voeg de admin pagina's toe
-	public function paginasToevoegen( array $paginas) 
+	public function paginasToevoegen( array $paginas)
 	{
 		$this->admin_paginas = $paginas;
 
@@ -49,7 +49,7 @@ class InstellingenApi
 
 	// Verwerk de gegevens van de subpagina's
 	// en geef een custom title mee aan het eerste child in de subpagina's
-	public function metSubPagina( string $title = null ) 
+	public function metSubPagina( string $title = null )
 	{
 		// In het geval dat er geen custom title is meegegeven,
 		// print de standaardtitel van de parent pagina
@@ -78,7 +78,7 @@ class InstellingenApi
 	}
 
 	// Voeg de subpagina's toe aan de back-end
-	public function subPaginasToevoegen( array $paginas)  
+	public function subPaginasToevoegen( array $paginas)
 	{
 		$this->admin_subpaginas = array_merge( $this->admin_subpaginas, $paginas );
 
@@ -95,14 +95,14 @@ class InstellingenApi
 		foreach($this->admin_subpaginas as $pagina) {
 			add_submenu_page( $pagina['parent_slug'], $pagina['page_title'], $pagina['menu_title'], $pagina['capability'], $pagina['menu_slug'], $pagina['callback'] );
 		}
-	} 
+	}
 
 	/*
 	 * Verwerk alle gegevens van de custom fields
 	 */
 
 	// Stel alle instellingen in van de custom fields
-	public function stelInstellingenIn( array $instellingen) 
+	public function stelInstellingenIn( array $instellingen)
 	{
 		$this->instellingen = $instellingen;
 
@@ -110,7 +110,7 @@ class InstellingenApi
 	}
 
 	// Stel alle secties in van de custom fields
-	public function stelSectiesIn( array $secties) 
+	public function stelSectiesIn( array $secties)
 	{
 		$this->secties = $secties;
 
@@ -118,7 +118,7 @@ class InstellingenApi
 	}
 
 	// Stel alle velden in van de custom fields
-	public function stelVeldenIn( array $velden) 
+	public function stelVeldenIn( array $velden)
 	{
 		$this->velden = $velden;
 
@@ -126,7 +126,7 @@ class InstellingenApi
 	}
 
 	// Loop door alle custom fields heen voordat ze toegevoegd worden
-	public function registreerCustomFields() 
+	public function registreerCustomFields()
 	{
 		// Registreer de instellingen
 		foreach($this->instellingen as $instelling) {

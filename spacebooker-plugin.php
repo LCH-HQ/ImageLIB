@@ -19,7 +19,7 @@ Text Domain: SpaceBooker
 defined( 'ABSPATH' ) or die( 'Better look somewhere else, mate.' );
 
 
-//echo "<h1>" . dirname( __FILE__ ) . "</h1>";
+// echo "<h1>" . dirname( __FILE__ ) . "</h1>";
 
 // Composer's AutoLoader inladen
 if ( file_exists( dirname( __FILE__ ) . '/vendor/autoload.php' ) ) {
