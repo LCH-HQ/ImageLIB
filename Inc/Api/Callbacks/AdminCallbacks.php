@@ -143,13 +143,7 @@ if( $waarde_radio == male){
   			<input type="radio" name="radio_buttons" value="other"> Other';
 
 
-
-
-
-
-
 			}
-
 
 
 
