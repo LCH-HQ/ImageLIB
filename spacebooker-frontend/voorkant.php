@@ -3,8 +3,10 @@
   <title>PHP Test</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
-  <link rel="stylesheet" href="/resources/demos/style.css">
+
+ <link rel="stylesheet" href="code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+  <link rel="stylesheet" href="resources/demos/style.css">
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
@@ -12,6 +14,19 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="js/animatie.js"></script>
   <link rel="stylesheet" type="text/css" href="css/animatie.css">
+
+
+  <script type = "text/javascript"
+      src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
+   </script>
+
+   <script type = "text/javascript"
+      src = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js">
+   </script>
+
+   <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+
+
 
 
   <script>
@@ -25,7 +40,14 @@
  </head>
  <body>
   <div class="wrapper">
-    <div class="title-box"><h4>Selecteer hier je voorkeuren</h4></div>
+
+    <div class="box 1">
+
+      <div class="title-box"><h4>Selecteer hier je voorkeuren</h4></div>
+
+
+    </div>
+
 
     <div class="box a">
       <!-- <h4>Selecteer een datum en tijd</h4> -->
@@ -78,35 +100,46 @@
 
     <div class="box d">
       <h4>Selecteer een ruimte</h4>
+
       <div class="ruimte-row"  id="Ruimtes">
-      <button onclick="Toon();">V</button>
+        <i class="fa fa-camera-retro fa-lg"></i>
+
+
+
+        <p>Ruitenberglaan</p>
+        <p><i class="fa fa-map-marker" aria-hidden="true"></i>Lokaal</p>
+        <p> Beeldscherm</p>
+        <p> Beamer</p>
+        <p> Capaciteit</p>
+        <p  onclick="toonMeerInfo();">Meer info</a>
+
       </div>
 
       <div class="ruimte-row"  id="Ruimtes1">
-      <button onclick="Toon1();">V</button>
 
       </div>
 
       <div class="ruimte-row"  id="Ruimtes2">
-      <button onclick="Toon2();">V</button>
 
       </div>
 
       <div class="ruimte-row"  id="Ruimtes3">
-      <button onclick="ToonX();">V</button>
 
       </div>
 
       <div class="ruimte-row"  id="Ruimtes4">
 
-      <button onclick="ToonX();">V</button>
+
 
       </div>
 
     </div>
 
-    <div class="box a2">
+    <div class="box a1">
         <h4>Jouw info</h4>
+    </div>
+
+    <div class="box a2">
       <form action="">
         <h3>Naam</h3>
         <input type="text" name="naam" placeholder="Je naam"><br>

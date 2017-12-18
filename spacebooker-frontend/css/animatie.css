@@ -1,1 +1,20 @@
+.ruimte-row {
+  transition: all 1s ease-out;
+}
 
+.ruimte-row.active {
+  height:150px;
+}
+
+
+.ruimte-row#Ruimtes{
+font-size: 15px;
+color: #3d3d3d;
+}
+
+
+
+.ruimte-row p {
+  float:left;
+  margin-left:20px;
+}
