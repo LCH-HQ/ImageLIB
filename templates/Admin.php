@@ -2,7 +2,7 @@
 
 <div class="wrap">
 	<h1>SpaceBooker</h1>
-	<?php settings_errors(); ?>
+	<?php settings_errors();?>
 
 	<form method="post" action="options.php">
 		<?php

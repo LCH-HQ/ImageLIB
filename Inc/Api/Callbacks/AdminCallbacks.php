@@ -18,11 +18,6 @@ class AdminCallbacks extends BaseController
 		return require_once( "$this->plugin_pad/templates/Admin.php");
 	}
 
-	public function adminRuimtes()
-	{
-		return require_once( "$this->plugin_pad/templates/Ruimtes.php");
-	}
-
 	public function adminReserveringen()
 	{
 		return require_once( "$this->plugin_pad/templates/Reserveringen.php");
@@ -68,7 +63,6 @@ class AdminCallbacks extends BaseController
 	// push opties met het geselecteerde item wanneer er opgeslagen wordt
 	public function spaceBookerDropdown() {
 		$waarde_dropdown = esc_attr( get_option( 'tekst_dropdown' ) );
-
 			echo '<select name="tekst_dropdown" value="' . $waarde_dropdown . '">';
 
 			if ( $waarde_dropdown == 1) {
@@ -127,4 +121,4 @@ class AdminCallbacks extends BaseController
 				echo "<input type='radio' name='radio_buttons' value='other'>Other";
 			}
 		}
-}
+
