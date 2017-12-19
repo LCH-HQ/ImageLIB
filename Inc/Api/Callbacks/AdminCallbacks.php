@@ -38,14 +38,25 @@ class AdminCallbacks extends BaseController
 		return $input;
 	}
 
-	public function optieGroepSectie()
+
+	public function optieGroepDropdown( $input )
 	{
-		echo 'Dit is de beschrijving van de sectie';
+		return $input;
 	}
 
-	public function spaceBookerTekstveldVoorbeeld() {
+	public function optieGroepRadioButtons( $input )
+	{
+		return $input;
+	}
+
+	public function optieGroepSectie()
+	{
+		echo 'Dit is de beschrijving van de sectie pagina';
+	}
+
+	public function spaceBookerTekstveld() {
 		$waarde = esc_attr( get_option( 'tekst_voorbeeld' ) );
-		echo '<input type="text" class="regular-text" name="tekst_voorbeeld" value="' . $waarde . '" placeholder="Dit is de placeholder">';
+		echo '<input type="text" class="regular-text" name="tekst_voorbeeld" value="' .$waarde . '" placeholder="Dit is de placeholder">';
 	}
 
 	// In het geval dat er een optie geselecteerd is van de dropdown,
@@ -53,6 +64,7 @@ class AdminCallbacks extends BaseController
 	public function spaceBookerDropdown() {
 		$waarde_dropdown = esc_attr( get_option( 'tekst_dropdown' ) );
 			echo '<select name="tekst_dropdown" value="' . $waarde_dropdown . '">';
+
 			if ( $waarde_dropdown == 1) {
 				echo 	"<option selected>Selecteer je keuze</option>
 						<option value='2'>HTC</option>
@@ -82,11 +94,12 @@ class AdminCallbacks extends BaseController
 						</select>";
 			}
 		}
-		
+
 	// In het geval dat er een optie geselecteerd is van de radio,
 	// push de opties met het geselecteerde item wanneer er opgeslagen wordt
 	public function spaceBookerRadioButtons() {
 		$waarde_radio = esc_attr( get_option( 'radio_buttons' ) );
+
 			if ( $waarde_radio == 'male' ) {
 				echo "<input type='radio' name='radio_buttons' value='male' checked>Male";
 				echo "<input type='radio' name='radio_buttons' value='female'>Female";
@@ -108,4 +121,4 @@ class AdminCallbacks extends BaseController
 				echo "<input type='radio' name='radio_buttons' value='other'>Other";
 			}
 		}
-}
+

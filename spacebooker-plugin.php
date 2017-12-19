@@ -18,6 +18,9 @@ Text Domain: SpaceBooker
 // Wanneer de plug-in buiten WordPress opgeroepen wordt, stop de gehele plug-in
 defined( 'ABSPATH' ) or die( 'Better look somewhere else, mate.' );
 
+
+// echo "<h1>" . dirname( __FILE__ ) . "</h1>";
+
 // Composer's AutoLoader inladen
 if ( file_exists( dirname( __FILE__ ) . '/vendor/autoload.php' ) ) {
 	require_once dirname( __FILE__ ) . '/vendor/autoload.php';
