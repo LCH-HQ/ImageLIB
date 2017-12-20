@@ -25,11 +25,11 @@ class Admin extends BaseController
 	public $subpaginas = array();
 
 	// Verwerk de pagina, subpagina's en content en push deze naar de back-end
-	public function registreren() 
-	{ 
+	public function registreren()
+	{
 		$this->instellingen = new InstellingenApi();
 
-		$this->callbacks = new AdminCallbacks(); 
+		$this->callbacks = new AdminCallbacks();
 
 		$this->plaatsPaginas();
 
@@ -42,11 +42,11 @@ class Admin extends BaseController
 		$this->instellingen->paginasToevoegen( $this->paginas )->metSubPagina( 'Dashboard' )->subPaginasToevoegen( $this->subpaginas)->registreren();
 
 		// Activeer submenu voor Ruimtes
-		add_action('admin_menu', array( $this, 'activeerRuimteCPT') ); 
+		add_action('admin_menu', array( $this, 'activeerRuimteCPT') );
 	}
 
 	// Genereer de pagina van SpaceBooker voor de back-end
-	public function plaatsPaginas() 
+	public function plaatsPaginas()
 	{
 		$this->paginas = array(
 			array(
@@ -62,7 +62,7 @@ class Admin extends BaseController
 	}
 
 	// Genereer de subpagina's voor SpaceBooker voor de back-end
-	public function plaatsSubPaginas() 
+	public function plaatsSubPaginas()
 	{
 		$this->subpaginas = array(
 			array(
@@ -132,7 +132,7 @@ class Admin extends BaseController
 	 */
 
 	// Stel de instellingen in voor de custom fields
-	public function stelInstellingenIn() 
+	public function stelInstellingenIn()
 	{
 		$args = array(
 			array(
@@ -149,6 +149,16 @@ class Admin extends BaseController
 				'option_group' => 'optie_groep_voorbeeld',
 				'option_name' => 'radio_buttons',
 				'callback' => array( $this->callbacks, 'optieGroepRadioButtons' )
+			),
+			array(
+				'option_group' => 'optie_groep_voorbeeld',
+				'option_name' => 'check_box',
+				'callback' => array( $this->callbacks, 'optieGroepCheckbox' )
+			),
+			array(
+				'option_group' => 'optie_groep_voorbeeld',
+				'option_name' => 'omschrijving_box',
+				'callback' => array( $this->callbacks, 'optieGroepCheckbox' )
 			)
 		);
 
@@ -156,7 +166,7 @@ class Admin extends BaseController
 	}
 
 	// Stel de secties in waar de custom fields in geplaatst worden
-	public function stelSectiesIn() 
+	public function stelSectiesIn()
 	{
 		$args = array(
 			array(
@@ -172,8 +182,8 @@ class Admin extends BaseController
 	}
 
 	// Stel de velden (van inputs naar dropdowns) in voor de secties
-	// en plaats deze in de secties van de subpagina's 
-	public function stelVeldenIn() 
+	// en plaats deze in de secties van de subpagina's
+	public function stelVeldenIn()
 	{
 		$args = array(
 			array(
@@ -193,7 +203,7 @@ class Admin extends BaseController
 			array(
 				// Moet identiek zijn aan de naam van de option_name in stelInstellingenIn();
 				'id' => 'tekst_dropdown',
-				'title' => 'Dit is de titel van het dropdown',
+				'title' => 'Specificeer het soort ruimte',
 				'callback' => array( $this->callbacks, 'spaceBookerDropdown'),
 				// Gebruik hiervoor de menu_slug van de (sub)pagina
 				'page' => 'spacebooker',
@@ -215,6 +225,34 @@ class Admin extends BaseController
 				'section' => 'sectie_id_voorbeeld',
 				'args' => array(
 					'label_for' => 'radio_buttons',
+					'class' => 'voorbeeld_class'
+				)
+			),
+			array(
+				// Moet identiek zijn aan de naam van de option_name in stelInstellingenIn();
+				'id' => 'check_box',
+				'title' => 'checkbox',
+				'callback' => array( $this->callbacks, 'spaceBookerRadioCheckbox'),
+				// Gebruik hiervoor de menu_slug van de (sub)pagina
+				'page' => 'spacebooker',
+				// Moet identiek zijn aan de id van stelSectiesIn();
+				'section' => 'sectie_id_voorbeeld',
+				'args' => array(
+					'label_for' => 'check_box',
+					'class' => 'voorbeeld_class'
+				)
+			),
+			array(
+				// Moet identiek zijn aan de naam van de option_name in stelInstellingenIn();
+				'id' => 'omschrijving_box',
+				'title' => 'omschrijving',
+				'callback' => array( $this->callbacks, 'spaceBookerOmschrijving'),
+				// Gebruik hiervoor de menu_slug van de (sub)pagina
+				'page' => 'spacebooker',
+				// Moet identiek zijn aan de id van stelSectiesIn();
+				'section' => 'sectie_id_voorbeeld',
+				'args' => array(
+					'label_for' => 'omschrijving_box',
 					'class' => 'voorbeeld_class'
 				)
 			)

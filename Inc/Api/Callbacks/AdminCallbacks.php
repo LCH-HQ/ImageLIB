@@ -89,7 +89,7 @@ class AdminCallbacks extends BaseController
 						</select>";
 			}
 		}
-		
+
 	// In het geval dat er een optie geselecteerd is van de radio,
 	// push de opties met het geselecteerde item wanneer er opgeslagen wordt
 	public function spaceBookerRadioButtons() {
@@ -115,4 +115,39 @@ class AdminCallbacks extends BaseController
 				echo "<input type='radio' name='radio_buttons' value='other'>Other";
 			}
 		}
+
+		public function spaceBookerRadioCheckbox() {
+			$waarde_checkbox = esc_attr( get_option( 'check_box' ) );
+				if ( $waarde_checkbox == 'male' ) {
+					echo "<input type='checkbox' name='check_box' value='male' checked> Male ";
+					echo "<input type='checkbox' name='check_box' value='female'> Female ";
+					echo "<input type='checkbox' name='check_box' value='other'> Other ";
+				}
+				else if ( $waarde_checkbox == 'female' ) {
+					echo "<input type='checkbox' name='check_box' value='male'> Male ";
+					echo "<input type='checkbox' name='check_box' value='female' checked> Female ";
+					echo "<input type='checkbox' name='check_box' value='other'> Other ";
+				}
+				else if ( $waarde_checkbox == 'other' ) {
+					echo "<input type='checkbox' name='check_box' value='male'> Male ";
+					echo "<input type='checkbox' name='check_box' value='female'> Female ";
+					echo "<input type='checkbox' name='check_box' value='other' checked> Other ";
+				}
+				else {
+					echo "<input type='checkbox' name='check_box' value='male'> Male ";
+					echo "<input type='checkbox' name='check_box' value='female'> Female ";
+					echo "<input type='checkbox' name='check_box' value='other'> Other ";
+				}
+			}
+
+
+			public function spaceBookerOmschrijving() {
+				$waarde_omschrijving = esc_attr( get_option( 'omschrijving_box' ) );
+
+						// echo "<input type='text' name='omschrijving_box' value='$waarde_omschrijving'>";
+						echo "<textarea  rows='4' cols='50' name='omschrijving_box' value='$waarde_omschrijving'>$waarde_omschrijving</textarea>";
+
+				}
+
+
 }
