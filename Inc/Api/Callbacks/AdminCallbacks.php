@@ -81,6 +81,13 @@ class AdminCallbacks extends BaseController
 						<option selected value='4'>C</option>
 						</select>";
 			}
+			else {
+				echo 	"<option selected>Selecteer je keuze</option>
+						<option value='2'>HTC</option>
+						<option value='3'>T</option>
+						<option value='4'>C</option>
+						</select>";
+			}
 		}
 		
 	// In het geval dat er een optie geselecteerd is van de radio,
