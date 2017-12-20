@@ -18,11 +18,6 @@ class AdminCallbacks extends BaseController
 		return require_once( "$this->plugin_pad/templates/Admin.php");
 	}
 
-	public function adminRuimtes()
-	{
-		return require_once( "$this->plugin_pad/templates/Ruimtes.php");
-	}
-
 	public function adminReserveringen()
 	{
 		return require_once( "$this->plugin_pad/templates/Reserveringen.php");
@@ -43,34 +38,21 @@ class AdminCallbacks extends BaseController
 		return $input;
 	}
 
-
-	public function optieGroepDropdown( $input )
-	{
-		return $input;
-	}
-
-	public function optieGroepRadioButtons( $input )
-	{
-		return $input;
-	}
-
 	public function optieGroepSectie()
 	{
-		echo 'Dit is de beschrijving van de sectie pagina';
+		echo 'Dit is de beschrijving van de sectie';
 	}
 
-	public function spaceBookerTekstveld() {
+	public function spaceBookerTekstveldVoorbeeld() {
 		$waarde = esc_attr( get_option( 'tekst_voorbeeld' ) );
-		echo '<input type="text" class="regular-text" name="tekst_voorbeeld" value="' .$waarde . '" placeholder="Dit is de placeholder">';
+		echo '<input type="text" class="regular-text" name="tekst_voorbeeld" value="' . $waarde . '" placeholder="Dit is de placeholder">';
 	}
 
 	// In het geval dat er een optie geselecteerd is van de dropdown,
 	// push opties met het geselecteerde item wanneer er opgeslagen wordt
 	public function spaceBookerDropdown() {
 		$waarde_dropdown = esc_attr( get_option( 'tekst_dropdown' ) );
-
 			echo '<select name="tekst_dropdown" value="' . $waarde_dropdown . '">';
-
 			if ( $waarde_dropdown == 1) {
 				echo 	"<option selected>Selecteer je keuze</option>
 						<option value='2'>HTC</option>
@@ -99,13 +81,19 @@ class AdminCallbacks extends BaseController
 						<option selected value='4'>C</option>
 						</select>";
 			}
+			else {
+				echo 	"<option selected>Selecteer je keuze</option>
+						<option value='2'>HTC</option>
+						<option value='3'>T</option>
+						<option value='4'>C</option>
+						</select>";
+			}
 		}
-
+		
 	// In het geval dat er een optie geselecteerd is van de radio,
 	// push de opties met het geselecteerde item wanneer er opgeslagen wordt
 	public function spaceBookerRadioButtons() {
 		$waarde_radio = esc_attr( get_option( 'radio_buttons' ) );
-
 			if ( $waarde_radio == 'male' ) {
 				echo "<input type='radio' name='radio_buttons' value='male' checked>Male";
 				echo "<input type='radio' name='radio_buttons' value='female'>Female";

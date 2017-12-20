@@ -1,7 +1,11 @@
 {
-    "name": "jeffry/spacebooker",
-    "description": "spacebooker",
+    "name": "skyle/spacebooker",
+    "description": "Schoolproject plugin",
     "type": "project",
-    "license": "gpl",
-    "require": {}
+    "license": "GPL",
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+    	"psr-4": {"Inc\\": "./inc"}
+    }
 }
