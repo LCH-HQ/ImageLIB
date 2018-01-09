@@ -22,6 +22,13 @@ class Opstarten extends BaseController
 	function opstartWachtrij() {
 		// enqueue all our scripts
 		wp_enqueue_style( 'styling', $this->plugin_url . 'assets/spacebookerstyle.css' );
+
 	}
+
+
+
+
+
+
 
 }

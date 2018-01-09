@@ -18,5 +18,6 @@ class Activeren
 		    } else {
 		    	flush_rewrite_rules();
 		    }
+
 		}
 }
