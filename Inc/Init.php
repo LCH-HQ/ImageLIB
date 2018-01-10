@@ -32,6 +32,7 @@ final class Init
 
 	// Roep de services aan om ze te kunnen starten
 	private static function instantieren( $class ) {
+
 		$service = new $class();
 
 		return $service;	

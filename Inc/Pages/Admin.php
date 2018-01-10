@@ -47,6 +47,7 @@ class Admin extends BaseController
 		// Activeer submenu voor Ruimtes
 		add_action('admin_menu', array( $this, 'genereerRuimteCPT') );
 		add_action( 'init', array( $this, 'genereerRuimteCPT') );
+		add_action( 'save_post', array($this, 'slaRuimteVeldenOp'), 1, 2 );
  
 	}
 
@@ -128,97 +129,179 @@ class Admin extends BaseController
 			    'has_archive' => true,
 			    'map_meta_cap' => true,
 			    'rewrite' => array( 'slug' => _x( 'ruimte', 'ruimtes') ),
-			    'supports' => array('title', 'custom-fields', 'page-attributes', 'post-formats')
+			    'supports' => array('title', 'page-attributes', 'post-formats'),
+			    // Voeg custom fields doe aan de CPT
+			    'register_meta_box_cb' => array($this, 'ruimteCPTVelden'),
 		    );
 
+	    // Maak CPT aan en refresh de permalinks in WP
 		register_post_type('ruimte_posts', $args);
-
 		flush_rewrite_rules();
-
-		add_shortcode( 'print_ruimtes', array( $this, 'activeerRuimteCPT' ) );
-		add_shortcode( 'custom-form', array($this, 'printRuimteFormulier') );
-	}
-
-	public function activeerRuimteCPT() {
-		$print_alle_posts = get_posts( array(
-			'post_status' => 'publish',
-			'posts_per_page' => 10,
-			'post_parent' => null
-		) );
-
-		if ( $print_alle_posts ) {
-			foreach ( $print_alle_posts as $post ) {
-				setup_postdata( $post );
-				the_title();
-				the_meta();
-			}
-			wp_reset_postdata();
-		}
-	}
-
-	public function printRuimteFormulier() {
-		?>
-		<form id="custom-post-type" name="custom-post-type" method="post" action="">
-		 
-		<p><label for="title">Post Title</label><br />
-		 
-		<input type="text" id="title" value="" tabindex="1" size="20" name="title" />
-		 
-		</p>
-		 
-		<p><?php wp_dropdown_categories( 'show_option_none=Category&tab_index=4&taxonomy=category' ); ?></p>
-		
-		 
-		<p align="right"><input type="submit" value="Publish" tabindex="6" id="submit" name="submit" /></p>
-		 
-		<input type="hidden" name="post-type" id="post-type" value="ruimte_posts" />
-		 
-		<input type="hidden" name="action" value="ruimte_posts" />
-		 
-		<?php wp_nonce_field( 'name_of_my_action','name_of_nonce_field' ); ?>
-		 
-		</form>
-		<?php
-
-		if($_POST){
-			$this->slaRuimteOp();
-		}
-	}
-
-	public function slaRuimteOp() {
-		if ( empty($_POST) || !wp_verify_nonce($_POST['name_of_nonce_field'],'name_of_my_action') )
-		{
-		print 'Sorry, your nonce did not verify.';
-		exit;
-		 
-		}else{
-		 
-		// Do some minor form validation to make sure there is content
-		if (isset ($_POST['title'])) {
-		$title =  $_POST['title'];
-		} else {
-		echo 'Please enter a title';
-		exit;
-		}
-		 
-		// Add the content of the form to $post as an array
-		$post = array(
-		'post_title' => wp_strip_all_tags( $title ),
-		'post_category' => $_POST['cat'],  // Usable for custom taxonomies too
-		'post_status' => 'publish',            // Choose: publish, preview, future, etc.
-		'post_type' => $_POST['post-type']  // Use a custom post type if you want to
-		);
-		wp_insert_post($post);  // http://codex.wordpress.org/Function_Reference/wp_insert_post
-		 
-		$location = home_url(); // redirect location, should be login page
-		 
-		echo "<meta http-equiv='refresh' content='0;url=$location' />"; exit;
-		} // end IF
 	}
 
 	/*
 	 * Genereer de custom fields voor de plug-in in de back-end
 	 */
+
+	public function ruimteCPTVelden() {
+		add_meta_box(
+			'ruimteLocatie',
+			'Locatie',
+			array($this, 'ruimteLocatie'),
+			'ruimte_posts',
+			'normal',
+			'default'
+		);
+
+		add_meta_box(
+			'ruimteBeschikbaarheid',
+			'Beschikbaarheid',
+			array($this, 'ruimteBeschikbaarheid'),
+			'ruimte_posts',
+			'normal',
+			'default'
+		);
+
+		add_meta_box(
+			'ruimteAttributen',
+			'Attributen',
+			array($this, 'ruimteAttributen'),
+			'ruimte_posts',
+			'normal',
+			'default'
+		);
+	}
+
+	public function ruimteLocatie() {
+		global $post;
+		// Nonce field valideren of het van de huidige site komt
+		wp_nonce_field( basename( __FILE__ ), 'locatie_velden' );
+		// Haal de data op uit de velden
+		$stad = get_post_meta( $post->ID, 'stad', true );
+		$adres = get_post_meta( $post->ID, 'adres', true );
+		$extra_details = get_post_meta( $post->ID, 'extra_details', true );
+		// Render het veld
+		echo '<span class="post-attributes-label">Stad</span>';
+		echo '<input type="text" name="stad" value="' . esc_textarea( $stad )  . '" class="widefat">';
+		echo '<span class="post-attributes-label">Adres</span>';
+		echo '<input type="text" name="adres" value="' . esc_textarea( $adres )  . '" class="widefat">';
+		echo '<span class="post-attributes-label">Extra details</span>';
+		echo '<input type="text" name="extra_details" value="' . esc_textarea( $extra_details )  . '" class="widefat">';
+	}
+
+	public function ruimteBeschikbaarheid() {
+		global $post;
+		// Nonce field valideren of het van de huidige site komt
+		wp_nonce_field( basename( __FILE__ ), 'beschikbaarheid_velden' );
+		// Haal de data op uit de velden
+		$begindatum = get_post_meta( $post->ID, 'begindatum', true );
+		$einddatum = get_post_meta( $post->ID, 'einddatum', true );
+		$begintijd = get_post_meta( $post->ID, 'begintijd', true );
+		$eindtijd = get_post_meta( $post->ID, 'eindtijd', true );
+		$hele_jaar_beschikbaar = get_post_meta( $post->ID, 'hele_jaar_beschikbaar', true );
+		// Render het veld
+		echo '<span class="post-attributes-label">Begindatum</span>';
+		echo '<input type="date" name="begindatum" value="' . esc_attr__( $begindatum )  . '" class="widefat">';
+		echo '<span class="post-attributes-label">Einddatum</span>';
+		echo '<input type="date" name="einddatum" value="' . esc_attr__( $einddatum )  . '" class="widefat">';
+		echo '<span class="post-attributes-label">Begintijd</span>';
+		echo '<input type="time" name="begintijd" value="' . esc_attr__( $begintijd )  . '" class="widefat">';
+		echo '<span class="post-attributes-label">Eindtijd</span>';
+		echo '<input type="time" name="eindtijd" value="' . esc_attr__( $eindtijd )  . '" class="widefat">';
+	}
+
+	public function ruimteAttributen() {
+		global $post;
+		// Nonce field valideren of het van de huidige site komt
+		wp_nonce_field( basename( __FILE__ ), 'attributen_velden' );
+		// Haal de data op uit de velden
+		$televisie = get_post_meta( $post->ID, 'televisie', true );
+		$beamer = get_post_meta( $post->ID, 'beamer', true );
+		$whiteboard = get_post_meta( $post->ID, 'whiteboard', true );
+		$anders = get_post_meta( $post->ID, 'anders', true );
+		// Render het veld
+		echo '<span class="post-attributes-label">Televisie</span>';
+		echo '<input type="checkbox" name="televisie" class="widefat" >';
+		// echo '<span class="post-attributes-label">Beamer</span>';
+		// echo '<input type="checkbox" name="beamer" value="' . esc_attr__( $beamer )  . '" class="widefat">';
+		// echo '<span class="post-attributes-label">Whiteboard</span>';
+		// echo '<input type="checkbox" name="whiteboard" value="' . esc_attr__( $whiteboard )  . '" class="widefat">';
+		// echo '<span class="post-attributes-label">Anders, namelijk...</span>';
+		echo '<input type="text" name="anders" value="' . esc_textarea( $anders )  . '" class="widefat">';
+	}
+
+	public function slaRuimteVeldenOp( $post_id, $post ) {
+		// Weiger toegang als de gebruiker niet de juiste gebruikersrechten heeft
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return $post_id;
+		}
+		// Verifiëren dat het opslaan van dezelfde gebruiker komt,
+		// in het geval dat iemand anders toegang wilt krijgen tot het opslaan
+		if ( ! isset( $_POST['stad'] ) || ! wp_verify_nonce( $_POST['locatie_velden'], basename(__FILE__) ) ) {
+			return $post_id;
+		}
+		if ( ! isset( $_POST['adres'] ) || ! wp_verify_nonce( $_POST['locatie_velden'], basename(__FILE__) ) ) {
+			return $post_id;
+		}
+		if ( ! isset( $_POST['extra_details'] ) || ! wp_verify_nonce( $_POST['locatie_velden'], basename(__FILE__) ) ) {
+			return $post_id;
+		}
+		if ( ! isset( $_POST['begindatum'] ) || ! wp_verify_nonce( $_POST['beschikbaarheid_velden'], basename(__FILE__) ) ) {
+			return $post_id;
+		}
+		if ( ! isset( $_POST['einddatum'] ) || ! wp_verify_nonce( $_POST['beschikbaarheid_velden'], basename(__FILE__) ) ) {
+			return $post_id;
+		}
+		if ( ! isset( $_POST['begintijd'] ) || ! wp_verify_nonce( $_POST['beschikbaarheid_velden'], basename(__FILE__) ) ) {
+			return $post_id;
+		}
+		if ( ! isset( $_POST['eindtijd'] ) || ! wp_verify_nonce( $_POST['beschikbaarheid_velden'], basename(__FILE__) ) ) {
+			return $post_id;
+		}
+		if ( ! isset( $_POST['televisie'] ) || ! wp_verify_nonce( $_POST['attributen_velden'] ? true : false, basename(__FILE__) ) ) {
+			return $post_id;
+		}
+		// if ( ! isset( $_POST['beamer'] ) || ! wp_verify_nonce( $_POST['attributen_velden'], basename(__FILE__) ) ) {
+		// 	return $post_id;
+		// }
+		// if ( ! isset( $_POST['whiteboard'] ) || ! wp_verify_nonce( $_POST['attributen_velden'], basename(__FILE__) ) ) {
+		// 	return $post_id;
+		// }
+		if ( ! isset( $_POST['anders'] ) || ! wp_verify_nonce( $_POST['attributen_velden'], basename(__FILE__) ) ) {
+			return $post_id;
+		}
+		// Nadat de authenticatie is gelukt, slaan we op.
+		// Data uit de velden opslaan in een array genaamd $ruimtes_meta
+		$ruimtes_meta['stad'] = esc_textarea( $_POST['stad'] );
+		$ruimtes_meta['adres'] = esc_textarea( $_POST['adres'] );
+		$ruimtes_meta['extra_detais'] = esc_textarea( $_POST['extra_details'] );
+		$ruimtes_meta['begindatum'] = esc_attr__($_POST['begindatum'] );
+		$ruimtes_meta['einddatum'] = esc_attr__($_POST['einddatum'] );
+		$ruimtes_meta['begintijd'] = esc_attr__($_POST['begintijd'] );
+		$ruimtes_meta['eindtijd'] = esc_attr__($_POST['eindtijd'] );
+		$ruimtes_meta['televisie'] = esc_attr__($_POST['televisie'] ? true : false);
+		// $ruimtes_meta['beamer'] = esc_attr__($_POST['beamer'] );
+		// $ruimtes_meta['whiteboard'] = esc_attr__($_POST['whiteboard'] );
+		$ruimtes_meta['anders'] = esc_textarea($_POST['anders'] );
+		// Neem de $ruimtes_meta array door
+		foreach ( $ruimtes_meta as $key => $value ) :
+			// Sla niet twee keer dezelfde data op
+			if ( 'revision' === $post->post_type ) {
+				return;
+			}
+			if ( get_post_meta( $post_id, $key, false ) ) {
+				// In het geval er al data geschreven is naar db, updaten
+				update_post_meta( $post_id, $key, $value );
+			} else {
+				// Als het veld geen data bevat, voeg de data toe
+				add_post_meta( $post_id, $key, $value);
+			}
+			if ( ! $value ) {
+				// Verwijder de meta key als er geen data in het veld zit
+				delete_post_meta( $post_id, $key );
+			}
+		endforeach;
+	}
 
 	// Stel de instellingen in voor de custom fields
 	public function stelInstellingenIn() 

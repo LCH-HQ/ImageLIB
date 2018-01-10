@@ -1,8 +1,50 @@
 <h1>Reserveringen</h1>
 
-<iframe src="https://calendar.google.com/calendar/embed?showTitle=0&amp;showNav=0&amp;showPrint=0&amp;showCalendars=0&amp;mode=WEEK&amp;height=600&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=faua17bp72ai50lncdk07q4in0%40group.calendar.google.com&amp;color=%23711616&amp;ctz=Europe%2FAmsterdam" style="border-width:0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+<div id="calendar"></div>
 
-<?php
+<script>
+	$(document).ready(function() {
 
-// Echo de kalender met reserveringen
-// echo do_shortcode( '[calendar id="21"]' );
+    // page is now ready, initialize the calendar...
+
+    $('#calendar').fullCalendar({
+        firstDay: 1,
+        weekends: false,
+        timezone: 'UTC',
+        defaultView: 'agendaWeek',
+        businessHours: true,
+        locale: 'nl',
+        nowIndicator: true,
+        aspectRatio: 2
+    });
+
+    $('.agendaItemVerzenden').on('click', function(e){
+	    // We don't want this to act as a link so cancel the link action
+	    e.preventDefault();
+
+	    // Find form and submit it
+	    verzendAgendaItem();
+	});
+
+
+    function verzendAgendaItem() {
+    alert('Item geplaatst!');
+    $("#calendar").fullCalendar('renderEvent',
+    {
+        title: $('.agendaItemNaam').val(),
+        start: new Date($('.agendaItemStart').val()),
+        end: new Date($('.agendaItemEinde').val()),
+        editable: true
+    },
+    true
+    );
+};
+});
+</script>
+
+<form id="agendaItemInvoeren">
+	<input type="text" class="agendaItemNaam">
+	<input type="datetime-local" class="agendaItemStart">
+	<input type="datetime-local" class="agendaItemEinde">
+	<input type="submit" class="agendaItemVerzenden">
+</form>
