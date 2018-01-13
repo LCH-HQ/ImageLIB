@@ -15,7 +15,7 @@
         businessHours: true,
         locale: 'nl',
         nowIndicator: true,
-        aspectRatio: 2
+        aspectRatio: 4
     });
 
     $('.agendaItemVerzenden').on('click', function(e){
