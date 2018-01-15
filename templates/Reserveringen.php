@@ -26,10 +26,8 @@
 	    verzendAgendaItem();
 	});
 
-
     function verzendAgendaItem() {
-    alert('Item geplaatst!');
-    $("#calendar").fullCalendar('renderEvent',
+    $('#calendar').fullCalendar('renderEvent',
     {
         title: $('.agendaItemNaam').val(),
         start: new Date($('.agendaItemStart').val()),
@@ -48,3 +46,11 @@
 	<input type="datetime-local" class="agendaItemEinde">
 	<input type="submit" class="agendaItemVerzenden">
 </form>
+
+<div class="wrap"> 
+<?php
+    use Inc\Api\Callbacks;
+
+    $this->haalReserveringDataOp();
+?>
+</div>

@@ -15,8 +15,11 @@ final class Init
 	public static function haalServicesOp() {
 		return [
 			Pages\Admin::class,
+			Pages\Ruimtes::class,
 			Base\Opstarten::class,
-			Base\InstellingenLinks::class
+			Base\InstellingenLinks::class,
+			Base\BaseController::class,
+			Base\Reserveren::class
 		];
 	}
 
@@ -30,11 +33,9 @@ final class Init
 		}
 	}
 
-	// Roep de services aan om ze te kunnen starten
-	private static function instantieren( $class ) {
-
-		$service = new $class();
-
-		return $service;	
-	}
+    // Roep de services aan om ze te kunnen starten
+    private static function instantieren( $class ) {
+            $service = new $class();
+            return $service;
+    }
 }

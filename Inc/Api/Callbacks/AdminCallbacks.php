@@ -115,4 +115,17 @@ class AdminCallbacks extends BaseController
 				echo "<input type='radio' name='radio_buttons' value='other'>Other";
 			}
 		}
+
+	public function haalReserveringDataOp() {
+        global $wpdb;
+
+        $table = $wpdb->prefix . "gereserveerd";
+        $myrows = $wpdb->get_results( "SELECT naam_ruimte
+                FROM $table" );
+
+        $naamRuimte = array_column($myrows, 'naam_ruimte');
+        foreach($naamRuimte as $ruimte) {
+	        echo $ruimte;
+	    }
+    }
 }
