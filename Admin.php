@@ -28,8 +28,15 @@
 	</div>
 	<?php } ?>
 	<input type="submit" id="doaction2" class="button action" value="Bekijk alle reserveringen">
-</div>
+	</div>
+
 	<br/><br/><h1>Recente aanpassingen</h1>
+	<?php
+		global $wpdb;
+		$changes = $wpdb->get_results("SELECT CHECKSUM_AGG(BINARY_CHECKSUM(*)) FROM wp_gereserveerd WITH (NOLOCK)");
+		foreach ( $changes as $print) { ?>
+			<p><?php echo $print -> $changes;?></p>
+	<?php } ?>
 
 
 	<!-- <form method="post" action="options.php">
