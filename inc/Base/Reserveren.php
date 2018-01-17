@@ -23,10 +23,102 @@ class Reserveren extends BaseController
 
 		// Maak het mogelijk om de form te renderen in een post
 		add_shortcode('reservering-form', array($this, 'maakReserveringForm') );
+		add_shortcode('agenda-toevoegen',array($this,'agenda'));
+
 	}
 
+
+	public function agendaAanmaken(){
+
+		wp_enqueue_style( 'fullcalendar_styling', $this->plugin_url . 'vendor/fullcalendar/fullcalendar.min.css' );
+		wp_enqueue_script( 'jquery_script', $this->plugin_url . 'vendor/fullcalendar/lib/jquery.min.js' );
+		wp_enqueue_script( 'moment_script', $this->plugin_url . 'vendor/fullcalendar/lib/moment.min.js' );
+		wp_enqueue_script( 'locale_script', $this->plugin_url . 'vendor/fullcalendar/nl.js' );
+		wp_enqueue_script( 'fullcalendar_script', $this->plugin_url . 'vendor/fullcalendar/fullcalendar.min.js' );
+
+		echo "<script>
+			$(document).ready(function calenderAanmaken() {
+
+				$('#calendar').fullCalendar({
+						firstDay: 1,
+						weekends: false,
+						timezone: 'UTC',
+						defaultView: 'agendaWeek',
+						businessHours: true,
+						locale: 'nl',
+						nowIndicator: true,
+						aspectRatio: 4
+				});
+
+				$('.agendaItemVerzenden').on('click', function(e){
+					e.preventDefault();
+
+					// Find form and submit it
+					verzendAgendaItem();
+			});
+
+				function verzendAgendaItem() {
+				$('#calendar').fullCalendar('renderEvent',
+				{
+						title: $('.agendaItemNaam').val(),
+						start: new Date($('.agendaItemStart').val()),
+						end: new Date($('.agendaItemEinde').val()),
+						editable: true
+				},
+				true
+				);
+		};
+		});
+
+
+		</script>";
+
+	}
+
+	public function agenda() {
+
+		echo "
+<link rel='stylesheet' href='vendor/fullcalendar/fullcalendar.min.css' />
+<script src='vendor/fullcalender/lib/jquery.min.js'></script>
+<script src='vender/fullcalender/lib/moment.min.js'></script>
+<script src='vender/fullcalendar/fullcalendar.js'></script>";
+
+echo '<div id="calendar"></div>';
+
+		echo '<form id="agendaItemInvoeren">
+			<input type="text" class="agendaItemNaam">
+			<input type="datetime-local" class="agendaItemStart">
+			<input type="datetime-local" class="agendaItemEinde">
+			<input type="submit" class="agendaItemVerzenden">
+		</form>
+
+		<div class="wrap">
+
+		</div>';
+
+		$this->agendaAanmaken();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+	function register_shortcodes(){
+	   add_shortcode('agenda-toevoegen',array($this,'agenda'));
+	}
+
+
+
 	private static function maakGereserveerdTable() {
-	
+
 		global $wpdb;
 		// creates my_table in database if not exists
 		$table = $wpdb->prefix . "gereserveerd";
@@ -60,19 +152,19 @@ class Reserveren extends BaseController
 		echo "<input type='hidden' id='reserveren_id_ruimte' value='$post_id' name='reserveren_id_ruimte' />";
 		echo "<input type='hidden' id='reserveren_timestamp' value='$verzenddatum' name='reserveren_timestamp' />";
 		echo "<input type='hidden' id='reserveren_ruimte' value='$post_titel' name='reserveren_ruimte' />";
-		echo "<h2>Reserveren</h2>"; 
+		echo "<h2>Reserveren</h2>";
 		echo '<p><label for="reserveren_datum">Datum</label><br />';
-		echo '<input type="date" id="reserveren_datum" name="reserveren_datum" required>';
+		echo '<input type="date" id="reserveren_datum" name="reserveren_datum">';
 		echo '<p><label for="reserveren_start_tijd">Begintijd</label><br />';
-		echo '<input type="time" id="reserveren_start_tijd" name="reserveren_start_tijd" required>';
+		echo '<input type="time" id="reserveren_start_tijd" name="reserveren_start_tijd">';
 		echo '<p><label for="reserveren_eind_tijd">Eindtijd</label><br />';
-		echo '<input type="time" id="reserveren_eind_tijd" name="reserveren_eind_tijd" required>';
+		echo '<input type="time" id="reserveren_eind_tijd" name="reserveren_eind_tijd">';
 		echo '<p><label for="reserveren_capaciteit">Capaciteit</label><br />';
-		echo '<input type="number" id="reserveren_capaciteit" name="reserveren_capaciteit" required>';
+		echo '<input type="number" id="reserveren_capaciteit" name="reserveren_capaciteit">';
 		echo '<p><label for="reserveren_studentennummer">Studentennummer</label><br />';
-		echo '<input type="text" id="reserveren_studentennummer" name="reserveren_studentennummer" required><br>';
+		echo '<input type="text" id="reserveren_studentennummer" name="reserveren_studentennummer"><br>';
 		echo '<p><label for="reserveren_email">Mailadres</label><br />';
-		echo '<input type="email" id="reserveren_email" name="reserveren_email" required><br>';
+		echo '<input type="email" id="reserveren_email" name="reserveren_email"><br>';
 		echo '<input type="submit" value="Verzenden" tabindex="6" id="submit" name="submit" />';
 		echo '<input type="hidden" name="action" value="reservering_form_nonce" />';
 		echo '</form>';
