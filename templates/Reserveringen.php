@@ -2,7 +2,11 @@
 
 <div id="calendar"></div>
 
-<script>
+<?php
+
+    use Inc\Api\Callbacks;
+
+echo "<script>
 	$(document).ready(function() {
 
     // page is now ready, initialize the calendar...
@@ -17,40 +21,16 @@
         nowIndicator: true,
         aspectRatio: 4
     });
+    ";
 
-    $('.agendaItemVerzenden').on('click', function(e){
-	    // We don't want this to act as a link so cancel the link action
-	    e.preventDefault();
+    $this->loopDoorReserveringen();
 
-	    // Find form and submit it
-	    verzendAgendaItem();
-	});
-
-    function verzendAgendaItem() {
-    $('#calendar').fullCalendar('renderEvent',
-    {
-        title: $('.agendaItemNaam').val(),
-        start: new Date($('.agendaItemStart').val()),
-        end: new Date($('.agendaItemEinde').val()),
-        editable: true
-    },
-    true
-    );
-};
+    echo '
 });
-</script>
-
-<form id="agendaItemInvoeren">
-	<input type="text" class="agendaItemNaam">
-	<input type="datetime-local" class="agendaItemStart">
-	<input type="datetime-local" class="agendaItemEinde">
-	<input type="submit" class="agendaItemVerzenden">
-</form>
+</script>';
+?>
 
 <div class="wrap"> 
 <?php
-    use Inc\Api\Callbacks;
-
-    $this->haalReserveringDataOp();
 ?>
 </div>

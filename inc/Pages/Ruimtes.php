@@ -100,6 +100,7 @@ class Ruimtes extends BaseController
 
 	public function ruimteLocatie() {
 		global $post;
+		global $wpdb;
 		// Nonce field valideren of het van de huidige site komt
 		wp_nonce_field( basename( __FILE__ ), 'locatie_velden' );
 		// Haal de data op uit de velden
@@ -117,6 +118,7 @@ class Ruimtes extends BaseController
 
 	public function ruimteBeschikbaarheid() {
 		global $post;
+		global $wpdb;
 		// Nonce field valideren of het van de huidige site komt
 		wp_nonce_field( basename( __FILE__ ), 'beschikbaarheid_velden' );
 		// Haal de data op uit de velden
@@ -126,10 +128,6 @@ class Ruimtes extends BaseController
 		$eindtijd = get_post_meta( $post->ID, 'eindtijd', true );
 		$hele_jaar_beschikbaar = get_post_meta( $post->ID, 'hele_jaar_beschikbaar', true );
 		// Render het veld
-		echo '<select id="beschikbaarheid_dropdown" name="beschikbaarheid_dropdown" onchange="verbergInputVelden()">';
-		echo '<option value="hele_jaar_beschikbaar" name="hele_jaar_beschikbaar">Hele jaar beschikbaar</option>';
-		echo '<option id="beperkt_beschikbaar" value="beperkt_beschikbaar" name="beperkt_beschikbaar">Beperkt beschikbaar</option>';
-		echo '</select>';
 		echo '<span class="post-attributes-label">Begindatum</span>';
 		echo '<input type="date" id="begindatum" name="begindatum" value="' . esc_textarea( $begindatum )  . '" class="widefat">';
 		echo '<span class="post-attributes-label">Einddatum</span>';
@@ -138,16 +136,13 @@ class Ruimtes extends BaseController
 		echo '<input type="time" id="begintijd" name="begintijd" value="' . esc_textarea( $begintijd )  . '" class="widefat">';
 		echo '<span class="post-attributes-label">Eindtijd</span>';
 		echo '<input type="time" id="eindtijd" name="eindtijd" value="' . esc_textarea( $eindtijd )  . '" class="widefat">';
+		echo '<span class="post-attributes-label">Hele jaar beschikbaar</span><br>';
+		echo "<input type='checkbox' value='ja' name='hele_jaar_beschikbaar' class='widefat'><br>";
 	}
 
 	public function ruimteAttributen() {
 		global $post;
 		global $wpdb;
-
-		$tabel_naam = $wpdb->prefix . "postmeta";
-		$data = $wpdb->get_results("SELECT * FROM $tabel_naam WHERE meta_value = 'aanwezig'");
-		print_r( $data );
-
 		// Nonce field valideren of het van de huidige site komt
 		wp_nonce_field( basename( __FILE__ ), 'attributen_velden' );
 		// Haal de data op uit de velden
@@ -156,18 +151,13 @@ class Ruimtes extends BaseController
 		$whiteboard = get_post_meta( $post->ID, 'whiteboard', true );
 		$anders = get_post_meta( $post->ID, 'anders', true );
 		// Render het veld
-		echo '<span class="post-attributes-label">Televisie</span>';
-
-		if( isset($data['televisie' == 'aanwezig']) ) { 
-			echo "<input type='checkbox' value='aanwezig' name='televisie' class='widefat' checked='checked'>";
-		} else if ( !isset($data['televisie' == 'aanwezig'] ) ) {
-			echo "<input type='checkbox' value='aanwezig' name='televisie' class='widefat'>";
-		}
-		// echo '<span class="post-attributes-label">Beamer</span>';
-		// echo '<input type="checkbox" name="beamer" value="' . esc_attr__( $beamer )  . '" class="widefat">';
-		// echo '<span class="post-attributes-label">Whiteboard</span>';
-		// echo '<input type="checkbox" name="whiteboard" value="' . esc_attr__( $whiteboard )  . '" class="widefat">';
-		// echo '<span class="post-attributes-label">Anders, namelijk...</span>';
+		echo '<span class="post-attributes-label">Televisie</span><br>';
+		echo "<input type='checkbox' value='aanwezig' name='televisie' class='widefat'><br>";
+		echo '<span class="post-attributes-label">Beamer</span><br>';
+		echo "<input type='checkbox' value='aanwezig' name='beamer' class='widefat'><br>";
+		echo '<span class="post-attributes-label">Whiteboard</span><br>';
+		echo "<input type='checkbox' value='aanwezig' name='whiteboard' class='widefat'><br>";
+		echo '<span class="post-attributes-label">Anders, namelijk...</span>';
 		echo '<input type="text" name="anders" value="' . esc_textarea( $anders )  . '" class="widefat">';
 	}
 
@@ -200,9 +190,12 @@ class Ruimtes extends BaseController
 		if ( ! isset( $_POST['eindtijd'] ) || ! wp_verify_nonce( $_POST['beschikbaarheid_velden'], basename(__FILE__) ) ) {
 			return $post_id;
 		}
-		if ( ! isset( $_POST['televisie'] ) || ! wp_verify_nonce( $_POST['attributen_velden'], basename(__FILE__) ) ) {
-			return $post_id;
-		}
+		// if ( ! isset( $_POST['hele_jaar_beschikbaar'] ) || ! wp_verify_nonce( $_POST['beschikbaarheid_velden'], basename(__FILE__) ) ) {
+		// 	return $post_id;
+		// }
+		// if ( ! isset( $_POST['televisie'] ) || ! wp_verify_nonce( $_POST['attributen_velden'], basename(__FILE__) ) ) {
+		// 	return $post_id;
+		// }
 		// if ( ! isset( $_POST['beamer'] ) || ! wp_verify_nonce( $_POST['attributen_velden'], basename(__FILE__) ) ) {
 		// 	return $post_id;
 		// }
@@ -215,17 +208,36 @@ class Ruimtes extends BaseController
 		// Nadat de authenticatie is gelukt, slaan we op.
 		// Data uit de velden opslaan in een array genaamd $ruimtes_meta
 
-		$ruimtes_meta['stad'] = esc_textarea( $_POST['stad'] );
-		$ruimtes_meta['adres'] = esc_textarea( $_POST['adres'] );
-		$ruimtes_meta['extra_detais'] = esc_textarea( $_POST['extra_details'] );
-		$ruimtes_meta['begindatum'] = esc_attr__($_POST['begindatum'] );
-		$ruimtes_meta['einddatum'] = esc_textarea($_POST['einddatum'] );
-		$ruimtes_meta['begintijd'] = esc_textarea($_POST['begintijd'] );
-		$ruimtes_meta['eindtijd'] = esc_textarea($_POST['eindtijd'] );
-		$ruimtes_meta['televisie'] = $_POST['televisie'];
-		// $ruimtes_meta['beamer'] = esc_attr__($_POST['beamer'] );
-		// $ruimtes_meta['whiteboard'] = esc_attr__($_POST['whiteboard'] );
-		$ruimtes_meta['anders'] = esc_textarea($_POST['anders'] );
+		// In het geval dat "hele jaar beschikbaar" is aangevinkt,
+		// Neem geen begin- en einddatum mee.
+		if ( isset( $_POST['hele_jaar_beschikbaar'] ) ) {
+			$ruimtes_meta['stad'] = esc_textarea( $_POST['stad'] );
+			$ruimtes_meta['adres'] = esc_textarea( $_POST['adres'] );
+			$ruimtes_meta['extra_detais'] = esc_textarea( $_POST['extra_details'] );
+			$ruimtes_meta['begindatum'] = '';
+			$ruimtes_meta['einddatum'] = '';
+			$ruimtes_meta['begintijd'] = esc_textarea($_POST['begintijd'] );
+			$ruimtes_meta['eindtijd'] = esc_textarea($_POST['eindtijd'] );
+			$ruimtes_meta['hele_jaar_beschikbaar'] = esc_attr__($_POST['hele_jaar_beschikbaar']);
+			$ruimtes_meta['televisie'] = esc_attr__($_POST['televisie']);
+			$ruimtes_meta['beamer'] = esc_attr__($_POST['beamer']);
+			$ruimtes_meta['whiteboard'] = esc_attr__($_POST['whiteboard']);
+			$ruimtes_meta['anders'] = esc_textarea($_POST['anders'] );
+		} else {
+			$ruimtes_meta['stad'] = esc_textarea( $_POST['stad'] );
+			$ruimtes_meta['adres'] = esc_textarea( $_POST['adres'] );
+			$ruimtes_meta['extra_detais'] = esc_textarea( $_POST['extra_details'] );
+			$ruimtes_meta['begindatum'] = esc_textarea($_POST['begindatum'] );
+			$ruimtes_meta['einddatum'] = esc_textarea($_POST['einddatum'] );
+			$ruimtes_meta['begintijd'] = esc_textarea($_POST['begintijd'] );
+			$ruimtes_meta['eindtijd'] = esc_textarea($_POST['eindtijd'] );
+			$ruimtes_meta['hele_jaar_beschikbaar'] = esc_attr__($_POST['hele_jaar_beschikbaar']);
+			$ruimtes_meta['televisie'] = esc_attr__($_POST['televisie']);
+			$ruimtes_meta['beamer'] = esc_attr__($_POST['beamer']);
+			$ruimtes_meta['whiteboard'] = esc_attr__($_POST['whiteboard']);
+			$ruimtes_meta['anders'] = esc_textarea($_POST['anders'] );
+		}
+
 		// Neem de $ruimtes_meta array door
 		foreach ( $ruimtes_meta as $key => $value ) :
 			// Sla niet twee keer dezelfde data op

@@ -13,6 +13,9 @@ use Inc\Base\BaseController;
 
 class AdminCallbacks extends BaseController
 {
+
+	public $naam_ruimte;
+
 	public function adminDashboard()
 	{
 		return require_once( "$this->plugin_pad/templates/Admin.php");
@@ -28,104 +31,31 @@ class AdminCallbacks extends BaseController
 		return require_once( "$this->plugin_pad/templates/Gebruikers.php");
 	}
 
-	/*
-	 * Verwerk alle data van de custom fields voor de plug-in
-	 * Bekijk de Inc/Pages/Admin.php voor alle data
-	 */
-
-	public function optieGroepVoorbeeld( $input )
-	{
-		return $input;
-	}
-
-	public function optieGroepSectie()
-	{
-		echo 'Dit is de beschrijving van de sectie';
-	}
-
-	public function spaceBookerTekstveldVoorbeeld() {
-		$waarde = esc_attr( get_option( 'tekst_voorbeeld' ) );
-		echo '<input type="text" class="regular-text" name="tekst_voorbeeld" value="' . $waarde . '" placeholder="Dit is de placeholder">';
-	}
-
-	// In het geval dat er een optie geselecteerd is van de dropdown,
-	// push opties met het geselecteerde item wanneer er opgeslagen wordt
-	public function spaceBookerDropdown() {
-		$waarde_dropdown = esc_attr( get_option( 'tekst_dropdown' ) );
-			echo '<select name="tekst_dropdown" value="' . $waarde_dropdown . '">';
-			if ( $waarde_dropdown == 1) {
-				echo 	"<option selected>Selecteer je keuze</option>
-						<option value='2'>HTC</option>
-						<option value='3'>T</option>
-						<option value='4'>C</option>
-						</select>";
-			}
-			else if ( $waarde_dropdown == 2) {
-				echo 	"<option>Selecteer je keuze</option>
-						<option selected value='2'>HTC</option>
-						<option value='3'>T</option>
-						<option value='4'>C</option>
-						</select>";
-			}
-			else if ( $waarde_dropdown == 3) {
-				echo 	"<option>Selecteer je keuze</option>
-						<option value='2'>HTC</option>
-						<option selected value='3'>T</option>
-						<option value='4'>C</option>
-						</select>";
-			}
-			else if ( $waarde_dropdown == 4 ) {
-				echo 	"<option>Selecteer je keuze</option>
-						<option value='2'>HTC</option>
-						<option value='3'>T</option>
-						<option selected value='4'>C</option>
-						</select>";
-			}
-			else {
-				echo 	"<option selected>Selecteer je keuze</option>
-						<option value='2'>HTC</option>
-						<option value='3'>T</option>
-						<option value='4'>C</option>
-						</select>";
-			}
-		}
-		
-	// In het geval dat er een optie geselecteerd is van de radio,
-	// push de opties met het geselecteerde item wanneer er opgeslagen wordt
-	public function spaceBookerRadioButtons() {
-		$waarde_radio = esc_attr( get_option( 'radio_buttons' ) );
-			if ( $waarde_radio == 'male' ) {
-				echo "<input type='radio' name='radio_buttons' value='male' checked>Male";
-				echo "<input type='radio' name='radio_buttons' value='female'>Female";
-				echo "<input type='radio' name='radio_buttons' value='other'>Other";
-			}
-			else if ( $waarde_radio == 'female' ) {
-				echo "<input type='radio' name='radio_buttons' value='male'>Male";
-				echo "<input type='radio' name='radio_buttons' value='female' checked>Female";
-				echo "<input type='radio' name='radio_buttons' value='other'>Other";
-			}
-			else if ( $waarde_radio == 'other' ) {
-				echo "<input type='radio' name='radio_buttons' value='male'>Male";
-				echo "<input type='radio' name='radio_buttons' value='female'>Female";
-				echo "<input type='radio' name='radio_buttons' value='other' checked>Other";
-			}
-			else {
-				echo "<input type='radio' name='radio_buttons' value='male'>Male";
-				echo "<input type='radio' name='radio_buttons' value='female'>Female";
-				echo "<input type='radio' name='radio_buttons' value='other'>Other";
-			}
-		}
-
-	public function haalReserveringDataOp() {
+    public function loopDoorReserveringen() {
+        // Haal de data op uit de database
         global $wpdb;
+        $tabel = $wpdb->prefix . "gereserveerd";
+        $reservering_sql = $wpdb->get_results( "SELECT * FROM $tabel", ARRAY_A );
 
-        $table = $wpdb->prefix . "gereserveerd";
-        $myrows = $wpdb->get_results( "SELECT naam_ruimte
-                FROM $table" );
+        // Render de reserverings-objecten in JavaScript
+        for( $aantalRows = 0 ; $aantalRows < count($reservering_sql) ; $aantalRows++ ) {
+		echo '
+		    $("#calendar").fullCalendar("renderEvent",
+		    {';
+				
+				// Sla de data op in variabelen
+		    	$reservering_start_tijd = $reservering_sql[$aantalRows]['reservering_start_tijd'];
+		    	$reservering_eind_tijd = $reservering_sql[$aantalRows]['reservering_eind_tijd'];
+		    	$reservering_datum = $reservering_sql[$aantalRows]['datum_reservering'];
+		
+				// Maak de tijden en datum leesbaar voor de agenda
+		    	$reservering_begin = $reservering_datum . "T" .$reservering_start_tijd . "Z";
+		    	$reservering_einde = $reservering_datum . "T" .$reservering_eind_tijd . "Z";
 
-        $naamRuimte = array_column($myrows, 'naam_ruimte');
-        foreach($naamRuimte as $ruimte) {
-	        echo $ruimte;
-	    }
+		        echo "title: '" . htmlspecialchars($reservering_sql[$aantalRows]['naam_ruimte']) . "',";
+		        echo "start: '" . htmlspecialchars($reservering_begin) . "',";
+		        echo "end: '" . htmlspecialchars($reservering_einde) . "'
+		    });";
+		    }
     }
 }
