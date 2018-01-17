@@ -6,31 +6,26 @@
 
     use Inc\Api\Callbacks;
 
-echo "<script>
-	$(document).ready(function() {
+    echo "<script>
+    	$(document).ready(function() {
 
-    // page is now ready, initialize the calendar...
+        // page is now ready, initialize the calendar...
 
-    $('#calendar').fullCalendar({
-        firstDay: 1,
-        weekends: false,
-        timezone: 'UTC',
-        defaultView: 'agendaWeek',
-        businessHours: true,
-        locale: 'nl',
-        nowIndicator: true,
-        aspectRatio: 4
+        $('#calendar').fullCalendar({
+            firstDay: 1,
+            weekends: false,
+            timezone: 'UTC',
+            defaultView: 'agendaWeek',
+            businessHours: true,
+            locale: 'nl',
+            nowIndicator: true,
+            aspectRatio: 3
+        });
+        ";
+
+        $this->loopDoorReserveringen();
+
+        echo '
     });
-    ";
-
-    $this->loopDoorReserveringen();
-
-    echo '
-});
-</script>';
+    </script>';
 ?>
-
-<div class="wrap"> 
-<?php
-?>
-</div>

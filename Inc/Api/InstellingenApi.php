@@ -14,14 +14,6 @@ class InstellingenApi
 
 	public $admin_subpaginas = array();
 
-	// Zal niet botsen met "instellingen" uit de Admin-class
-	// omdat deze niet 'extended' wordt naar InstellingenApi
-	public $instellingen = array();
-
-	public $secties = array();
-
-	public $velden = array();
-
 	/*
 	 * Verwerk alle gegevens voor de pagina en subpagina's
 	 */
@@ -33,10 +25,6 @@ class InstellingenApi
 		if ( ! empty($this->admin_paginas) ) {
 			add_action( 'admin_menu', array( $this, 'adminMenuToevoegen') );
 		} 
-
-		if ( ! empty($this->instellingen) ) {
-			add_action( 'admin_init', array( $this, 'registreerCustomFields' ) );
-		}
 	}
 
 	// Voeg de admin pagina's toe
@@ -96,52 +84,5 @@ class InstellingenApi
 			add_submenu_page( $pagina['parent_slug'], $pagina['page_title'], $pagina['menu_title'], $pagina['capability'], $pagina['menu_slug'], $pagina['callback'] );
 		}
 	} 
-
-	/*
-	 * Verwerk alle gegevens van de custom fields
-	 */
-
-	// Stel alle instellingen in van de custom fields
-	public function stelInstellingenIn( array $instellingen) 
-	{
-		$this->instellingen = $instellingen;
-
-		return $this;
-	}
-
-	// Stel alle secties in van de custom fields
-	public function stelSectiesIn( array $secties) 
-	{
-		$this->secties = $secties;
-
-		return $this;
-	}
-
-	// Stel alle velden in van de custom fields
-	public function stelVeldenIn( array $velden) 
-	{
-		$this->velden = $velden;
-
-		return $this;
-	}
-
-	// Loop door alle custom fields heen voordat ze toegevoegd worden
-	public function registreerCustomFields() 
-	{
-		// Registreer de instellingen
-		foreach($this->instellingen as $instelling) {
-			register_setting( $instelling['option_group'], $instelling['option_name'], ( isset( $instelling['callback'] ) ? $instelling['callback'] : '' ) );
-		}
-
-		// Voeg de instellingen-sectie toe
-		foreach($this->secties as $sectie) {
-			add_settings_section( $sectie['id'], $sectie['title'], ( isset( $sectie['callback'] ) ? $sectie['callback'] : '' ), $sectie['page'] );
-		}
-
-		// Voeg instelling-velden toe
-		foreach($this->velden as $veld) {
-			add_settings_field( $veld['id'], $veld['title'], ( isset( $veld['callback'] ) ? $veld['callback'] : '' ), $veld['page'], $veld['section'], ( isset( $veld['args'] ) ? $veld['args'] : '' ) );
-		}
-	}
 
 }

@@ -37,7 +37,7 @@ class Admin extends BaseController
 
 		$this->plaatsSubPaginas();
 
-		$this->instellingen->paginasToevoegen( $this->paginas )->metSubPagina( 'Dashboard' )->subPaginasToevoegen( $this->subpaginas)->registreren();
+		$this->instellingen->paginasToevoegen( $this->paginas )->metSubPagina( 'Overzicht' )->subPaginasToevoegen( $this->subpaginas)->registreren();
 	}
 
 	// Genereer de pagina van SpaceBooker voor de back-end

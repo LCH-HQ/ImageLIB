@@ -190,18 +190,6 @@ class Ruimtes extends BaseController
 		if ( ! isset( $_POST['eindtijd'] ) || ! wp_verify_nonce( $_POST['beschikbaarheid_velden'], basename(__FILE__) ) ) {
 			return $post_id;
 		}
-		// if ( ! isset( $_POST['hele_jaar_beschikbaar'] ) || ! wp_verify_nonce( $_POST['beschikbaarheid_velden'], basename(__FILE__) ) ) {
-		// 	return $post_id;
-		// }
-		// if ( ! isset( $_POST['televisie'] ) || ! wp_verify_nonce( $_POST['attributen_velden'], basename(__FILE__) ) ) {
-		// 	return $post_id;
-		// }
-		// if ( ! isset( $_POST['beamer'] ) || ! wp_verify_nonce( $_POST['attributen_velden'], basename(__FILE__) ) ) {
-		// 	return $post_id;
-		// }
-		// if ( ! isset( $_POST['whiteboard'] ) || ! wp_verify_nonce( $_POST['attributen_velden'], basename(__FILE__) ) ) {
-		// 	return $post_id;
-		// }
 		if ( ! isset( $_POST['anders'] ) || ! wp_verify_nonce( $_POST['attributen_velden'], basename(__FILE__) ) ) {
 			return $post_id;
 		}
