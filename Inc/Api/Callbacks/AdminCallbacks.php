@@ -13,14 +13,12 @@ use Inc\Base\BaseController;
 
 class AdminCallbacks extends BaseController
 {
+
+	public $naam_ruimte;
+
 	public function adminDashboard()
 	{
 		return require_once( "$this->plugin_pad/templates/Admin.php");
-	}
-
-	public function adminRuimtes()
-	{
-		return require_once( "$this->plugin_pad/templates/Ruimtes.php");
 	}
 
 	public function adminReserveringen()
@@ -33,23 +31,31 @@ class AdminCallbacks extends BaseController
 		return require_once( "$this->plugin_pad/templates/Gebruikers.php");
 	}
 
-	/*
-	 * Verwerk alle data van de custom fields voor de plug-in
-	 * Bekijk de Inc/Pages/Admin.php voor alle data
-	 */
+    public function loopDoorReserveringen() {
+        // Haal de data op uit de database
+        global $wpdb;
+        $tabel = $wpdb->prefix . "gereserveerd";
+        $reservering_sql = $wpdb->get_results( "SELECT * FROM $tabel", ARRAY_A );
 
-	public function optieGroepVoorbeeld( $input )
-	{
-		return $input;
-	}
+        // Render de reserverings-objecten in JavaScript
+        for( $aantalRows = 0 ; $aantalRows < count($reservering_sql) ; $aantalRows++ ) {
+		echo '
+		    $("#calendar").fullCalendar("renderEvent",
+		    {';
+				
+				// Sla de data op in variabelen
+		    	$reservering_start_tijd = $reservering_sql[$aantalRows]['reservering_start_tijd'];
+		    	$reservering_eind_tijd = $reservering_sql[$aantalRows]['reservering_eind_tijd'];
+		    	$reservering_datum = $reservering_sql[$aantalRows]['datum_reservering'];
+		
+				// Maak de tijden en datum leesbaar voor de agenda
+		    	$reservering_begin = $reservering_datum . "T" .$reservering_start_tijd . "Z";
+		    	$reservering_einde = $reservering_datum . "T" .$reservering_eind_tijd . "Z";
 
-	public function optieGroepSectie()
-	{
-		echo 'Dit is de beschrijving van de sectie';
-	}
-
-	public function spaceBookerTekstveldVoorbeeld() {
-		$waarde = esc_attr( get_option( 'tekst_voorbeeld' ) );
-		echo '<input type="text" class="regular-text" name="tekst_voorbeeld" value="' . $waarde . '" placeholder="Dit is de placeholder">';
-	}
+		        echo "title: '" . htmlspecialchars($reservering_sql[$aantalRows]['naam_ruimte']) . "',";
+		        echo "start: '" . htmlspecialchars($reservering_begin) . "',";
+		        echo "end: '" . htmlspecialchars($reservering_einde) . "'
+		    });";
+		    }
+    }
 }

@@ -11,6 +11,6 @@ namespace Inc\Base;
 class Activeren
 {
 	public static function activeren() {
-		flush_rewrite_rules();
-	}
+		    	flush_rewrite_rules();
+		    }
 }
