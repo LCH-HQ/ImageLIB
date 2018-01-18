@@ -15,7 +15,7 @@
             firstDay: 1,
             weekends: false,
             timezone: 'UTC',
-            defaultView: 'agendaWeek',
+            defaultView: 'listWeek',
             businessHours: true,
             locale: 'nl',
             nowIndicator: true,

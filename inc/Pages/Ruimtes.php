@@ -119,6 +119,11 @@ class Ruimtes extends BaseController
 	public function ruimteBeschikbaarheid() {
 		global $post;
 		global $wpdb;
+        $tabel = $wpdb->prefix . "postmeta";
+        $hele_jaar_beschikbaar_sql = $wpdb->get_results( 
+        	"SELECT meta_key FROM $tabel WHERE post_id = $post->ID AND meta_key = 'hele_jaar_beschikbaar'", 
+        	ARRAY_A );
+
 		// Nonce field valideren of het van de huidige site komt
 		wp_nonce_field( basename( __FILE__ ), 'beschikbaarheid_velden' );
 		// Haal de data op uit de velden
@@ -137,12 +142,28 @@ class Ruimtes extends BaseController
 		echo '<span class="post-attributes-label">Eindtijd</span>';
 		echo '<input type="time" id="eindtijd" name="eindtijd" value="' . esc_textarea( $eindtijd )  . '" class="widefat">';
 		echo '<span class="post-attributes-label">Hele jaar beschikbaar</span><br>';
-		echo "<input type='checkbox' value='ja' name='hele_jaar_beschikbaar' class='widefat'><br>";
+		if ( isset($hele_jaar_beschikbaar_sql[0]) ) {
+			echo "<input type='checkbox' value='ja' name='hele_jaar_beschikbaar' class='widefat' checked='checked'><br>";
+		}
+		else {
+			echo "<input type='checkbox' value='ja' name='hele_jaar_beschikbaar' class='widefat'><br>";
+		}
 	}
 
 	public function ruimteAttributen() {
 		global $post;
 		global $wpdb;
+        $tabel = $wpdb->prefix . "postmeta";
+        $televisie_sql = $wpdb->get_results( 
+        	"SELECT meta_key FROM $tabel WHERE post_id = $post->ID AND meta_key = 'televisie'", 
+        	ARRAY_A );
+        $beamer_sql = $wpdb->get_results( 
+        	"SELECT meta_key FROM $tabel WHERE post_id = $post->ID AND meta_key = 'beamer'", 
+        	ARRAY_A );
+        $whiteboard_sql = $wpdb->get_results( 
+        	"SELECT meta_key FROM $tabel WHERE post_id = $post->ID AND meta_key = 'whiteboard'", 
+        	ARRAY_A );
+
 		// Nonce field valideren of het van de huidige site komt
 		wp_nonce_field( basename( __FILE__ ), 'attributen_velden' );
 		// Haal de data op uit de velden
@@ -152,11 +173,26 @@ class Ruimtes extends BaseController
 		$anders = get_post_meta( $post->ID, 'anders', true );
 		// Render het veld
 		echo '<span class="post-attributes-label">Televisie</span><br>';
-		echo "<input type='checkbox' value='aanwezig' name='televisie' class='widefat'><br>";
+		if ( isset($televisie_sql[0]) ) {
+			echo "<input type='checkbox' value='aanwezig' name='televisie' class='widefat' checked='checked'><br>";
+		}
+		else {
+			echo "<input type='checkbox' value='aanwezig' name='televisie' class='widefat'><br>";
+		}
 		echo '<span class="post-attributes-label">Beamer</span><br>';
-		echo "<input type='checkbox' value='aanwezig' name='beamer' class='widefat'><br>";
+		if ( isset($beamer_sql[0]) ) {
+			echo "<input type='checkbox' value='aanwezig' name='beamer' class='widefat' checked='checked'><br>";
+		}
+		else {
+			echo "<input type='checkbox' value='aanwezig' name='beamer' class='widefat'><br>";
+		}
 		echo '<span class="post-attributes-label">Whiteboard</span><br>';
-		echo "<input type='checkbox' value='aanwezig' name='whiteboard' class='widefat'><br>";
+		if ( isset($whiteboard_sql[0]) ) {
+			echo "<input type='checkbox' value='aanwezig' name='whiteboard' class='widefat' checked='checked'><br>";
+		}
+		else {
+			echo "<input type='checkbox' value='aanwezig' name='whiteboard' class='widefat'><br>";
+		}
 		echo '<span class="post-attributes-label">Anders, namelijk...</span>';
 		echo '<input type="text" name="anders" value="' . esc_textarea( $anders )  . '" class="widefat">';
 	}
