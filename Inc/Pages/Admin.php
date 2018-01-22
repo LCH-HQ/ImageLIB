@@ -11,7 +11,6 @@ namespace Inc\Pages;
 
 // Paden definiëren voor de classes
 use Inc\Base\BaseController;
-use Inc\Base\Reserveren;
 use Inc\Api\InstellingenApi;
 use Inc\Api\Callbacks\AdminCallbacks;
 
@@ -62,19 +61,19 @@ class Admin extends BaseController
 		$this->subpaginas = array(
 			array(
 				'parent_slug' => 'spacebooker',
+				'page_title' => 'Agenda',
+				'menu_title' => 'Agenda',
+				'capability' => 'manage_options',
+				'menu_slug' => 'spacebooker_agenda',
+				'callback' => array( $this->callbacks, 'adminAgenda')
+			),
+			array(
+				'parent_slug' => 'spacebooker',
 				'page_title' => 'Reserveringen',
 				'menu_title' => 'Reserveringen',
 				'capability' => 'manage_options',
 				'menu_slug' => 'spacebooker_reserveringen',
 				'callback' => array( $this->callbacks, 'adminReserveringen')
-			),
-			array(
-				'parent_slug' => 'spacebooker',
-				'page_title' => 'Gebruikers',
-				'menu_title' => 'Gebruikers',
-				'capability' => 'manage_options',
-				'menu_slug' => 'spacebooker_gebruikers',
-				'callback' => array( $this->callbacks, 'adminGebruikers')
 			)
 		);
 	}

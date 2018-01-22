@@ -21,14 +21,14 @@ class AdminCallbacks extends BaseController
 		return require_once( "$this->plugin_pad/templates/Admin.php");
 	}
 
+	public function adminAgenda()
+	{
+		return require_once( "$this->plugin_pad/templates/Agenda.php");
+	}
+
 	public function adminReserveringen()
 	{
 		return require_once( "$this->plugin_pad/templates/Reserveringen.php");
-	}
-
-	public function adminGebruikers()
-	{
-		return require_once( "$this->plugin_pad/templates/Gebruikers.php");
 	}
 
     public function loopDoorReserveringen() {

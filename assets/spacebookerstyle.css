@@ -1,3 +1,42 @@
 p {
 	font-size: 100%;
+	max-width: 20%;
+	float:left;
+	margin-right: 30px;
+}
+.reserveringen_wrap {
+	width: 95%;
+	float: left;
+	background-color: #fff;
+	border: 1px solid #c9c9c9;
+	padding: 20px;
+	margin-right: 10px;
+	margin-bottom: 15px;
+	height: 10%;
+	text-align: left;
+}
+.reserveringen_wrap h3 {
+	font-size: 14px;
+	color: #0073aa;
+	max-width: 20%;
+	margin-right: 5px;
+	float:left;
+}
+.h1_wrap {
+	width: 100%;
+	height: 50px;
+
+}
+.main_wrap {
+	width: 100%;
+	float: left;
+	margin-bottom: 40px;
+}
+.reserveer_wrap {
+	width: 30%;
+	float:left;
+}
+.break_ {
+	padding-top: 25px;
+	clear:both;
 }
