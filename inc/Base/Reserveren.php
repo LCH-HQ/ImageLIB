@@ -49,11 +49,136 @@ class Reserveren extends BaseController
 	}
 
 	public function maakReserveringForm() {
+		global $post;
+		global $wpdb;
+
+        $tabel = $wpdb->prefix . "postmeta";
+        $stad_sql = $wpdb->get_results( 
+        	"SELECT meta_value FROM $tabel WHERE post_id = $post->ID AND meta_key = 'stad'", 
+        	ARRAY_A );
+        $adres_sql = $wpdb->get_results( 
+        	"SELECT meta_value FROM $tabel WHERE post_id = $post->ID AND meta_key = 'adres'", 
+        	ARRAY_A );
+	    $begindatum_sql = $wpdb->get_results( 
+        	"SELECT meta_value FROM $tabel WHERE post_id = $post->ID AND meta_key = 'begindatum'", 
+        	ARRAY_A );
+        $einddatum_sql = $wpdb->get_results( 
+        	"SELECT meta_value FROM $tabel WHERE post_id = $post->ID AND meta_key = 'einddatum'", 
+        	ARRAY_A );
+        $begintijd_sql = $wpdb->get_results( 
+        	"SELECT meta_value FROM $tabel WHERE post_id = $post->ID AND meta_key = 'begintijd'", 
+        	ARRAY_A );
+        $eindtijd_sql = $wpdb->get_results( 
+        	"SELECT meta_value FROM $tabel WHERE post_id = $post->ID AND meta_key = 'eindtijd'", 
+        	ARRAY_A );
+        $hele_jaar_beschikbaar_sql = $wpdb->get_results( 
+        	"SELECT meta_value FROM $tabel WHERE post_id = $post->ID AND meta_key = 'hele_jaar_beschikbaar'", 
+        	ARRAY_A );
+        $televisie_sql = $wpdb->get_results( 
+        	"SELECT meta_value FROM $tabel WHERE post_id = $post->ID AND meta_key = 'televisie'", 
+        	ARRAY_A );
+        $beamer_sql = $wpdb->get_results( 
+        	"SELECT meta_value FROM $tabel WHERE post_id = $post->ID AND meta_key = 'beamer'", 
+        	ARRAY_A );
+        $whiteboard_sql = $wpdb->get_results( 
+        	"SELECT meta_value FROM $tabel WHERE post_id = $post->ID AND meta_key = 'whiteboard'", 
+        	ARRAY_A );
+        $anders_sql = $wpdb->get_results( 
+        	"SELECT meta_value FROM $tabel WHERE post_id = $post->ID AND meta_key = 'anders'", 
+        	ARRAY_A );
 
 		// Genereer de data voor de hidden fields
 		$post_id = get_the_ID();
 		$post_titel = get_the_title( $post_id );
 		$verzenddatum = date("Y-m-d G:i:s");
+
+		// Render gegevens van de ruimte
+		if ( isset($stad_sql[0]) && isset($adres_sql[0]) ) {
+			$stad_sql = array_shift($stad_sql);
+			$adres_sql = array_shift($adres_sql);
+
+			$stad_naam = implode(", ", $stad_sql);
+			$adres_naam = implode(", ", $adres_sql);
+
+			echo "<h4>Locatie</h4>";
+			echo "$adres_naam<br>";
+			echo "$stad_naam<br>";
+		}
+		else {
+			exit;
+		}
+		if( isset($begindatum_sql[0]) && isset($einddatum_sql[0]) ) {
+			$begindatum_sql = array_shift($begindatum_sql);
+			$einddatum_sql = array_shift($einddatum_sql);
+
+
+			$begindatum = implode(", ", $begindatum_sql);
+			$einddatum = implode(", ", $einddatum_sql);
+
+
+			echo "<h4>Beschikbaarheid</h4>";
+			echo "<p>$begindatum - $einddatum<br>";
+		} else if( isset($hele_jaar_beschikbaar_sql[0]) ) {
+			echo "<h4>Beschikbaarheid</h4>";
+			echo "<p>Hele jaar beschikbaar<br>";
+		} else {
+			exit;
+		}
+
+		if( isset($begintijd_sql[0]) && isset($eindtijd_sql[0]) ) {
+			$begintijd_sql = array_shift($begintijd_sql);
+			$eindtijd_sql = array_shift($eindtijd_sql);
+
+			$begintijd = implode(", ", $begintijd_sql);
+			$eindtijd = implode(", ", $eindtijd_sql);
+
+			echo "van $begintijd tot $eindtijd</p>";
+		} else {
+			exit;
+		}
+
+		if( isset($televisie_sql[0]) ) {
+			$televisie_sql = array_shift($televisie_sql);
+
+			$televisie = implode(", ", $televisie_sql);
+
+			echo "<h4>Faciliteiten</h4>";
+			echo "<strong>Televisie -</strong> aanwezig<br>";
+		} else {
+			echo "<h4>Faciliteiten</h4>";
+			echo "<strong>Televisie -</strong> niet aanwezig<br>";
+		}
+
+		if( isset($beamer_sql[0]) ) {
+			$beamer_sql = array_shift($beamer_sql);
+
+			$beamer = implode(", ", $beamer_sql);
+
+			echo "<strong>Beamer -</strong> aanwezig<br>";
+		} else {
+			echo "<strong>Beamer -</strong> niet aanwezig<br>";
+		}
+
+		if( isset($whiteboard_sql[0]) ) {
+			$whiteboard_sql = array_shift($whiteboard_sql);
+
+			$whiteboard = implode(", ", $whiteboard_sql);
+
+			echo "<strong>Whiteboard -</strong> aanwezig<br>";
+		} else {
+			echo "<strong>Whiteboard -</strong> niet aanwezig<br>";
+		}
+
+		if( isset($anders_sql[0]) ) {
+			$anders_sql = array_shift($anders_sql);
+
+			$anders = implode(", ", $anders_sql);
+
+			echo "<h5>Overige faciliteiten</h5>";
+			echo "$anders<br>";
+		} else {
+			exit;
+		}
 
 		// Render het formulier
 		echo '<form id="reserveren-form" name="reserveren-form" method="post" action="">';
