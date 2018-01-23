@@ -153,7 +153,10 @@ class Reserveren extends BaseController
 
         $datum_sql_ruimte = [];
         for( $aantalRows = 0 ; $aantalRows < count($datum_sql) ; $aantalRows++ ) {
-            $datum_sql_ruimte[] = $datum_sql[$aantalRows]['post_id'];
+            if( $datum_sql[$aantalRows]['meta_key'] == "hele_jaar_beschikbaar" ) {
+                $datum_sql_ruimte[] = $datum_sql[$aantalRows]['post_id'];
+                $datum_sql_ruimte[] = $datum_sql[$aantalRows]['post_id'];
+            }
         }
 
         $post_sql_ruimte = [];
@@ -171,7 +174,12 @@ class Reserveren extends BaseController
             print("tijden_sql" . $tijden_sql_ruimte[$aantalRows] . "<br>");
             print("datum_sql" . $datum_sql_ruimte[$aantalRows] . "<br>");
             print("post_sql" . $post_sql_ruimte[$aantalRows] . "<br>");
-            if( in_array($datum_sql_ruimte[$aantalRows], $tijden_sql_ruimte ) && in_array( $post_sql_ruimte[$aantalRows], $datum_sql_ruimte ) ) {
+            
+            
+            $check_datum = array_count_values($datum_sql_ruimte);
+            $check_tijd = array_count_values($tijden_sql_ruimte);
+            
+            if( $check_tijd[$post_sql_ruimte[$aantalRows]] == 2 && $check_datum[$post_sql_ruimte[$aantalRows]] == 2 ) {
                 $table_meta = $wpdb->prefix . "postmeta";
                 $table_posts = $wpdb->prefix . "posts";
                 // $filter_sql = $wpdb->get_results("SELECT * FROM $table_meta WHERE post_id = '$post_sql_ruimte'", ARRAY_A);
@@ -217,10 +225,7 @@ class Reserveren extends BaseController
                 $anders_sql = $wpdb->get_results(
                                                  "SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte[$aantalRows]' AND meta_key = 'anders'",
                                                  ARRAY_A );
-        //}
-        
-            //for( $aantalRows = 0 ; $aantalRows < count($post_sql) ; $aantalRows++ ) {
-                print_r($stad_sql);
+       
                 if ( isset($stad_sql[0]) && isset($adres_sql[0]) ) {
                     $stad_sql = array_shift($stad_sql);
                     $adres_sql = array_shift($adres_sql);
