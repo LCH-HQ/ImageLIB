@@ -15,6 +15,8 @@ class Reserveren extends BaseController
 	public $post_id;
 	public $post_titel;
 	public $verzenddatum;
+	private $filter_sql;
+	// private $post_sql_ruimte = array();
 
 	public function registreren() {
 
@@ -51,156 +53,60 @@ class Reserveren extends BaseController
 		global $post;
 		global $wpdb;
 
-  //       $tabel = $wpdb->prefix . "postmeta";
-  //       $stad_sql = $wpdb->get_results( 
-  //       	"SELECT meta_value FROM $tabel WHERE post_id = $post->ID AND meta_key = 'stad'", 
-  //       	ARRAY_A );
-  //       $adres_sql = $wpdb->get_results( 
-  //       	"SELECT meta_value FROM $tabel WHERE post_id = $post->ID AND meta_key = 'adres'", 
-  //       	ARRAY_A );
-	 //    $begindatum_sql = $wpdb->get_results( 
-  //       	"SELECT meta_value FROM $tabel WHERE post_id = $post->ID AND meta_key = 'begindatum'", 
-  //       	ARRAY_A );
-  //       $einddatum_sql = $wpdb->get_results( 
-  //       	"SELECT meta_value FROM $tabel WHERE post_id = $post->ID AND meta_key = 'einddatum'", 
-  //       	ARRAY_A );
-  //       $begintijd_sql = $wpdb->get_results( 
-  //       	"SELECT meta_value FROM $tabel WHERE post_id = $post->ID AND meta_key = 'begintijd'", 
-  //       	ARRAY_A );
-  //       $eindtijd_sql = $wpdb->get_results( 
-  //       	"SELECT meta_value FROM $tabel WHERE post_id = $post->ID AND meta_key = 'eindtijd'", 
-  //       	ARRAY_A );
-  //       $hele_jaar_beschikbaar_sql = $wpdb->get_results( 
-  //       	"SELECT meta_value FROM $tabel WHERE post_id = $post->ID AND meta_key = 'hele_jaar_beschikbaar'", 
-  //       	ARRAY_A );
-  //       $televisie_sql = $wpdb->get_results( 
-  //       	"SELECT meta_value FROM $tabel WHERE post_id = $post->ID AND meta_key = 'televisie'", 
-  //       	ARRAY_A );
-  //       $beamer_sql = $wpdb->get_results( 
-  //       	"SELECT meta_value FROM $tabel WHERE post_id = $post->ID AND meta_key = 'beamer'", 
-  //       	ARRAY_A );
-  //       $whiteboard_sql = $wpdb->get_results( 
-  //       	"SELECT meta_value FROM $tabel WHERE post_id = $post->ID AND meta_key = 'whiteboard'", 
-  //       	ARRAY_A );
-  //       $anders_sql = $wpdb->get_results( 
-  //       	"SELECT meta_value FROM $tabel WHERE post_id = $post->ID AND meta_key = 'anders'", 
-  //       	ARRAY_A );
-
 		// Genereer de data voor de hidden fields
 		$post_id = get_the_ID();
 		$post_titel = get_the_title( $post_id );
 		$verzenddatum = date("Y-m-d G:i:s");
 
 		// // Render gegevens van de ruimte
-		// if ( isset($stad_sql[0]) && isset($adres_sql[0]) ) {
-		// 	$stad_sql = array_shift($stad_sql);
-		// 	$adres_sql = array_shift($adres_sql);
-
-		// 	$stad_naam = implode(", ", $stad_sql);
-		// 	$adres_naam = implode(", ", $adres_sql);
-
-		// 	echo "<h4>Locatie</h4>";
-		// 	echo "$adres_naam<br>";
-		// 	echo "$stad_naam<br>";
-		// }
-		// else {
-		// 	exit;
-		// }
-		// if( isset($begindatum_sql[0]) && isset($einddatum_sql[0]) ) {
-		// 	$begindatum_sql = array_shift($begindatum_sql);
-		// 	$einddatum_sql = array_shift($einddatum_sql);
-
-
-		// 	$begindatum = implode(", ", $begindatum_sql);
-		// 	$einddatum = implode(", ", $einddatum_sql);
-
-
-		// 	echo "<h4>Beschikbaarheid</h4>";
-		// 	echo "<p>$begindatum - $einddatum<br>";
-		// } else if( isset($hele_jaar_beschikbaar_sql[0]) ) {
-		// 	echo "<h4>Beschikbaarheid</h4>";
-		// 	echo "<p>Hele jaar beschikbaar<br>";
-		// } else {
-		// 	exit;
-		// }
-
-		// if( isset($begintijd_sql[0]) && isset($eindtijd_sql[0]) ) {
-		// 	$begintijd_sql = array_shift($begintijd_sql);
-		// 	$eindtijd_sql = array_shift($eindtijd_sql);
-
-		// 	$begintijd = implode(", ", $begintijd_sql);
-		// 	$eindtijd = implode(", ", $eindtijd_sql);
-
-		// 	echo "van $begintijd tot $eindtijd</p>";
-		// } else {
-		// 	exit;
-		// }
-
-		// if( isset($televisie_sql[0]) ) {
-		// 	$televisie_sql = array_shift($televisie_sql);
-
-		// 	$televisie = implode(", ", $televisie_sql);
-
-		// 	echo "<h4>Faciliteiten</h4>";
-		// 	echo "<strong>Televisie -</strong> aanwezig<br>";
-		// } else {
-		// 	echo "<h4>Faciliteiten</h4>";
-		// 	echo "<strong>Televisie -</strong> niet aanwezig<br>";
-		// }
-
-		// if( isset($beamer_sql[0]) ) {
-		// 	$beamer_sql = array_shift($beamer_sql);
-
-		// 	$beamer = implode(", ", $beamer_sql);
-
-		// 	echo "<strong>Beamer -</strong> aanwezig<br>";
-		// } else {
-		// 	echo "<strong>Beamer -</strong> niet aanwezig<br>";
-		// }
-
-		// if( isset($whiteboard_sql[0]) ) {
-		// 	$whiteboard_sql = array_shift($whiteboard_sql);
-
-		// 	$whiteboard = implode(", ", $whiteboard_sql);
-
-		// 	echo "<strong>Whiteboard -</strong> aanwezig<br>";
-		// } else {
-		// 	echo "<strong>Whiteboard -</strong> niet aanwezig<br>";
-		// }
-
-		// if( isset($anders_sql[0]) ) {
-		// 	$anders_sql = array_shift($anders_sql);
-
-		// 	$anders = implode(", ", $anders_sql);
-
-		// 	echo "<h5>Overige faciliteiten</h5>";
-		// 	echo "$anders<br>";
-		// } else {
-		// 	exit;
-		// }
 
 		// Render zoekveld
-		echo 	"<form action='' method='post'>
+
+		// Zoek ruimtes
+		if (!empty($_POST['ruimte_datum']) && !empty($_POST['ruimte_begintijd']) && !empty($_POST['ruimte_eindtijd'])) {
+			global $wpdb;
+			global $tijden_sql;
+			global $datum_sql;
+			global $post_sql;
+
+			$datum = $_POST['ruimte_datum'];
+			$begintijd = $_POST['ruimte_begintijd'];
+			$eindtijd = $_POST['ruimte_eindtijd'];
+			
+			$table_meta = $wpdb->prefix . "postmeta";
+			$table_posts = $wpdb->prefix . "posts";
+			$tijden_sql = $wpdb->get_results("SELECT * FROM $table_meta WHERE meta_key = 'begintijd' OR meta_key = 'eindtijd' AND meta_value BETWEEN '$begintijd' AND '$eindtijd'", ARRAY_A);
+			$datum_sql = $wpdb->get_results("SELECT * FROM $table_meta WHERE meta_key = 'begindatum' AND meta_value <= '$datum' OR meta_key = 'einddatum' AND meta_value >= '$datum' OR meta_key = 'hele_jaar_beschikbaar' AND meta_value = 'ja'", ARRAY_A);
+			$post_sql = $wpdb->get_results("SELECT post_title, ID FROM $table_posts WHERE post_type = 'ruimte_posts' AND post_status = 'publish'", ARRAY_A);
+
+				$this->verzamelFilterData();
+
+		echo 	'<form action="" method="post">';
+		echo	"<label for='ruimte_datum'>Datum</label>
+				<input type='date' name='ruimte_datum' value='$datum'><br>
+				<label for='ruimte_begintijd'>Begintijd</label>
+				<input type='time' name='ruimte_begintijd' value='$begintijd'><br />
+				<label for='ruimte_eindtijd'>Eindtijd</label> 
+				<input type='time' name='ruimte_eindtijd' value='$eindtijd'><br>
+				
+				<input type='submit' name='submit' value='Zoek een ruimte'><br /><br />
+				</form>";
+
+				wp_footer();
+
+		} else {
+		echo 	'<form action="" method="post">';
+		echo "
 				<label for='ruimte_datum'>Datum</label>
 				<input type='date' name='ruimte_datum' value=''><br>
 				<label for='ruimte_begintijd'>Begintijd</label>
 				<input type='time' name='ruimte_begintijd' value=''><br />
 				<label for='ruimte_eindtijd'>Eindtijd</label> 
-				<input type='time' name='ruimte_eindtijd' value=''><br>
-				
-				<input type='submit' id='doaction2' class='button action' value='Zoek een ruimte'><br /><br />
-				</form>";
+				<input type='time' name='ruimte_eindtijd' value=''><br>";
 
-		// Zoek ruimtes
-		if (!empty($_POST['ruimte_datum']) && !empty($_POST['ruimte_begintijd']) && !empty($_POST['ruimte_eindtijd'])) {
-			global $wpdb;
-			$datum = $_POST['ruimte_datum'];
-			$begintijd = $_POST['ruimte_begintijd'];
-			$eindtijd = $_POST['ruimte_eindtijd'];
-			
-			$table = $wpdb->prefix . "postmeta";
-			$sql_tijden = $wpdb->get_results("SELECT * FROM $table WHERE meta_key = 'begintijd' OR meta_key = 'eindtijd' AND meta_value BETWEEN '$begintijd' AND '$eindtijd'", ARRAY_A);
-			$sql_datum = $wpdb->get_results("SELECT * FROM $table WHERE meta_key = 'begindatum' AND meta_value <= '$datum' OR meta_key = 'einddatum' AND meta_value >= '$datum' OR meta_key = 'hele_jaar_beschikbaar' AND meta_value = 'ja'", ARRAY_A);
+				submit_button( 'Zoek een ruimte', 'primary', 'submit');
+
+		echo "</form>";
 		}
 
 
@@ -232,6 +138,160 @@ class Reserveren extends BaseController
 		if($_POST){
 		$this->slaReserveringFormOp();
 		}
+	}
+
+	public function verzamelFilterData() {
+			global $wpdb;
+			global $tijden_sql;
+			global $datum_sql;
+			global $post_sql;
+
+			for( $aantalRows = 0 ; $aantalRows < count($tijden_sql) ; $aantalRows++ ) {
+				$tijden_sql_ruimte = $tijden_sql[$aantalRows]['post_id'];
+			}
+
+			for( $aantalRows = 0 ; $aantalRows < count($datum_sql) ; $aantalRows++ ) {
+				$datum_sql_ruimte = $datum_sql[$aantalRows]['post_id'];
+			}
+
+			for( $aantalRows = 0 ; $aantalRows < count($post_sql) ; $aantalRows++ ) {
+				$post_sql_ruimte = $post_sql[$aantalRows]['ID'];
+			}
+
+			if( $tijden_sql_ruimte == $datum_sql_ruimte && $datum_sql_ruimte == $post_sql_ruimte ) {
+				$table_meta = $wpdb->prefix . "postmeta";
+				$table_posts = $wpdb->prefix . "posts";
+				// $filter_sql = $wpdb->get_results("SELECT * FROM $table_meta WHERE post_id = '$post_sql_ruimte'", ARRAY_A);
+				// $filter_naam_sql = $wpdb->get_results("SELECT post_title FROM $table_posts WHERE ID = '$post_sql_ruimte'", ARRAY_A);
+
+
+			$stad_sql = $wpdb->get_results( 
+	        	"SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte' AND meta_key = 'stad'", 
+	        	ARRAY_A );
+	        $adres_sql = $wpdb->get_results( 
+	        	"SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte' AND meta_key = 'adres'", 
+	        	ARRAY_A );
+		    $begindatum_sql = $wpdb->get_results( 
+	        	"SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte' AND meta_key = 'begindatum'", 
+	        	ARRAY_A );
+	        $einddatum_sql = $wpdb->get_results( 
+	        	"SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte' AND meta_key = 'einddatum'", 
+	        	ARRAY_A );
+	        $begintijd_sql = $wpdb->get_results( 
+	        	"SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte' AND meta_key = 'begintijd'", 
+	        	ARRAY_A );
+	        $eindtijd_sql = $wpdb->get_results( 
+	        	"SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte' AND meta_key = 'eindtijd'", 
+	        	ARRAY_A );
+	        $hele_jaar_beschikbaar_sql = $wpdb->get_results( 
+	        	"SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte' AND meta_key = 'hele_jaar_beschikbaar'",
+	        	ARRAY_A );
+	        $televisie_sql = $wpdb->get_results( 
+	        	"SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte' AND meta_key = 'televisie'", 
+	        	ARRAY_A );
+	        $beamer_sql = $wpdb->get_results( 
+	        	"SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte' AND meta_key = 'beamer'", 
+	        	ARRAY_A );
+	        $whiteboard_sql = $wpdb->get_results( 
+	        	"SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte' AND meta_key = 'whiteboard'", 
+	        	ARRAY_A );
+	        $anders_sql = $wpdb->get_results( 
+	        	"SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte' AND meta_key = 'anders'", 
+	        	ARRAY_A );
+
+				for( $aantalRows = 0 ; $aantalRows < count($post_sql) ; $aantalRows++ ) {
+
+					if ( isset($stad_sql[0]) && isset($adres_sql[0]) ) {
+						$stad_sql = array_shift($stad_sql);
+						$adres_sql = array_shift($adres_sql);
+
+						$stad_naam = implode(", ", $stad_sql);
+						$adres_naam = implode(", ", $adres_sql);
+
+						echo "<h4>Locatie</h4>";
+						echo "$adres_naam<br>";
+						echo "$stad_naam<br>";
+					}
+					else {
+						echo '<p>Geen adres beschikbaar</p>';
+					}
+					if( isset($begindatum_sql[0]) && isset($einddatum_sql[0]) ) {
+						$begindatum_sql = array_shift($begindatum_sql);
+						$einddatum_sql = array_shift($einddatum_sql);
+
+
+						$begindatum = implode(", ", $begindatum_sql);
+						$einddatum = implode(", ", $einddatum_sql);
+
+
+						echo "<h4>Beschikbaarheid</h4>";
+						echo "<p>$begindatum - $einddatum<br>";
+					} else if( isset($hele_jaar_beschikbaar_sql[0]) ) {
+						echo "<h4>Beschikbaarheid</h4>";
+						echo "<p>Hele jaar beschikbaar<br>";
+					} else {
+						echo '<p>Niet beschikbaar</p>';
+					}
+
+					if( isset($begintijd_sql[0]) && isset($eindtijd_sql[0]) ) {
+						$begintijd_sql = array_shift($begintijd_sql);
+						$eindtijd_sql = array_shift($eindtijd_sql);
+
+						$begintijd = implode(", ", $begintijd_sql);
+						$eindtijd = implode(", ", $eindtijd_sql);
+
+						echo "van $begintijd tot $eindtijd</p>";
+					} else {
+						echo '<p>Hele jaar open</p>';
+					}
+
+					if( isset($televisie_sql[0]) ) {
+						$televisie_sql = array_shift($televisie_sql);
+
+						$televisie = implode(", ", $televisie_sql);
+
+						echo "<h4>Faciliteiten</h4>";
+						echo "<strong>Televisie -</strong> aanwezig<br>";
+					} else {
+						echo "<h4>Faciliteiten</h4>";
+						echo "<strong>Televisie -</strong> niet aanwezig<br>";
+					}
+
+					if( isset($beamer_sql[0]) ) {
+						$beamer_sql = array_shift($beamer_sql);
+
+						$beamer = implode(", ", $beamer_sql);
+
+						echo "<strong>Beamer -</strong> aanwezig<br>";
+					} else {
+						echo "<strong>Beamer -</strong> niet aanwezig<br>";
+					}
+
+					if( isset($whiteboard_sql[0]) ) {
+						$whiteboard_sql = array_shift($whiteboard_sql);
+
+						$whiteboard = implode(", ", $whiteboard_sql);
+
+						echo "<strong>Whiteboard -</strong> aanwezig<br>";
+					} else {
+						echo "<strong>Whiteboard -</strong> niet aanwezig<br>";
+					}
+
+					if( isset($anders_sql[0]) ) {
+						$anders_sql = array_shift($anders_sql);
+
+						$anders = implode(", ", $anders_sql);
+
+						echo "<h5>Overige faciliteiten</h5>";
+						echo "$anders<br>";
+					} else {
+						echo '&nbsp;';
+					}
+				}
+
+			} else {
+				echo "Dat lukt niet!";
+			}
 	}
 
 	public function slaReserveringFormOp() {

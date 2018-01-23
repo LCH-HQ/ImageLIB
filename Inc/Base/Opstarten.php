@@ -27,7 +27,6 @@ class Opstarten extends BaseController
 		wp_enqueue_script( 'moment_script', $this->plugin_url . 'vendor/fullcalendar/lib/moment.min.js' );
 		wp_enqueue_script( 'locale_script', $this->plugin_url . 'vendor/fullcalendar/nl.js' );
 		wp_enqueue_script( 'fullcalendar_script', $this->plugin_url . 'vendor/fullcalendar/fullcalendar.min.js' );
-		wp_enqueue_script( 'spacebooker_script', $this->plugin_url . 'assets/spacebooker-cpt.js' );
 	}
 
 }
