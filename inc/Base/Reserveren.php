@@ -156,6 +156,8 @@ class Reserveren extends BaseController
             if( $datum_sql[$aantalRows]['meta_key'] == "hele_jaar_beschikbaar" ) {
                 $datum_sql_ruimte[] = $datum_sql[$aantalRows]['post_id'];
                 $datum_sql_ruimte[] = $datum_sql[$aantalRows]['post_id'];
+            } else {
+                $datum_sql_ruimte[] = $datum_sql[$aantalRows]['post_id'];
             }
         }
 
