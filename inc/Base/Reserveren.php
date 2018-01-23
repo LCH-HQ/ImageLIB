@@ -163,9 +163,14 @@ class Reserveren extends BaseController
         for( $aantalRows = 0 ; $aantalRows < count($post_sql_ruimte); $aantalRows++ ) {
             print($aantalRows);
             print_r($post_sql_ruimte);
-            print("tijden_sql" . $tijden_sql_ruimte[$aantalRows]);
-            print("datum_sql" . $datum_sql_ruimte[$aantalRows]);
-            print("post_sql" . $post_sql_ruimte[$aantalRows]);
+            print("<br>");
+            print_r($datum_sql_ruimte);
+            print("<br>");
+            print_r($tijden_sql_ruimte);
+            print("<br>");
+            print("tijden_sql" . $tijden_sql_ruimte[$aantalRows] . "<br>");
+            print("datum_sql" . $datum_sql_ruimte[$aantalRows] . "<br>");
+            print("post_sql" . $post_sql_ruimte[$aantalRows] . "<br>");
             if( $tijden_sql_ruimte[$aantalRows] == $datum_sql_ruimte[$aantalRows] && $datum_sql_ruimte[$aantalRows] == $post_sql_ruimte[$aantalRows] ) {
                 $table_meta = $wpdb->prefix . "postmeta";
                 $table_posts = $wpdb->prefix . "posts";
