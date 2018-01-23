@@ -146,12 +146,14 @@ class Reserveren extends BaseController
         global $datum_sql;
         global $post_sql;
 
+        $tijden_sql_ruimte = [];
         for( $aantalRows = 0 ; $aantalRows < count($tijden_sql) ; $aantalRows++ ) {
-            $tijden_sql_ruimte = $tijden_sql[$aantalRows]['post_id'];
+            $tijden_sql_ruimte[] = $tijden_sql[$aantalRows]['post_id'];
         }
 
+        $datum_sql_ruimte = [];
         for( $aantalRows = 0 ; $aantalRows < count($datum_sql) ; $aantalRows++ ) {
-            $datum_sql_ruimte = $datum_sql[$aantalRows]['post_id'];
+            $datum_sql_ruimte[] = $datum_sql[$aantalRows]['post_id'];
         }
 
         $post_sql_ruimte = [];
@@ -161,7 +163,7 @@ class Reserveren extends BaseController
         for( $aantalRows = 0 ; $aantalRows < count($post_sql_ruimte); $aantalRows++ ) {
             print($aantalRows);
             print_r($post_sql_ruimte);
-            if( $tijden_sql_ruimte == $datum_sql_ruimte && $datum_sql_ruimte == $post_sql_ruimte[$aantalRows] ) {
+            if( $tijden_sql_ruimte[$aantalRows] == $datum_sql_ruimte[$aantalRows] && $datum_sql_ruimte[$aantalRows] == $post_sql_ruimte[$aantalRows] ) {
                 $table_meta = $wpdb->prefix . "postmeta";
                 $table_posts = $wpdb->prefix . "posts";
                 // $filter_sql = $wpdb->get_results("SELECT * FROM $table_meta WHERE post_id = '$post_sql_ruimte'", ARRAY_A);
@@ -298,8 +300,6 @@ class Reserveren extends BaseController
                     echo '&nbsp;';
                 }
             }
-        } else {
-            echo "Dat lukt niet!";
         }
 	}
 
