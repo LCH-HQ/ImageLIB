@@ -179,7 +179,12 @@ class Reserveren extends BaseController
             $check_datum = array_count_values($datum_sql_ruimte);
             $check_tijd = array_count_values($tijden_sql_ruimte);
             
-            if( $check_tijd[$post_sql_ruimte[$aantalRows]] == 2 && $check_datum[$post_sql_ruimte[$aantalRows]] == 2 ) {
+            print_r($check_datum);
+            print_r($check_tijd);
+            
+            $id = $post_sql_ruimte[$aantalRows];
+            
+            if( $check_tijd[$id] == 2 && $check_datum[$id] == 2 ) {
                 $table_meta = $wpdb->prefix . "postmeta";
                 $table_posts = $wpdb->prefix . "posts";
                 // $filter_sql = $wpdb->get_results("SELECT * FROM $table_meta WHERE post_id = '$post_sql_ruimte'", ARRAY_A);
