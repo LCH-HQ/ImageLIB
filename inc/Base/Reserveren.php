@@ -163,6 +163,9 @@ class Reserveren extends BaseController
         for( $aantalRows = 0 ; $aantalRows < count($post_sql_ruimte); $aantalRows++ ) {
             print($aantalRows);
             print_r($post_sql_ruimte);
+            print("tijden_sql" . $tijden_sql_ruimte[$aantalRows]);
+            print("datum_sql" . $datum_sql_ruimte[$aantalRows]);
+            print("post_sql" . $post_sql_ruimte[$aantalRows]);
             if( $tijden_sql_ruimte[$aantalRows] == $datum_sql_ruimte[$aantalRows] && $datum_sql_ruimte[$aantalRows] == $post_sql_ruimte[$aantalRows] ) {
                 $table_meta = $wpdb->prefix . "postmeta";
                 $table_posts = $wpdb->prefix . "posts";
@@ -214,15 +217,15 @@ class Reserveren extends BaseController
             //for( $aantalRows = 0 ; $aantalRows < count($post_sql) ; $aantalRows++ ) {
                 print_r($stad_sql);
                 if ( isset($stad_sql[0]) && isset($adres_sql[0]) ) {
-//                    $stad_sql = array_shift($stad_sql);
-//                    $adres_sql = array_shift($adres_sql);
-//
-//                    $stad_naam = implode(", ", $stad_sql);
-//                    $adres_naam = implode(", ", $adres_sql);
+                    $stad_sql = array_shift($stad_sql);
+                    $adres_sql = array_shift($adres_sql);
+
+                    $stad_naam = implode(", ", $stad_sql);
+                    $adres_naam = implode(", ", $adres_sql);
 
                     echo "<h4>Locatie</h4>";
-                    echo $adres_naam['meta_value'] . "<br>";
-                    echo $stad_naam['meta_value'] . "<br>";
+                    echo $adres_naam . "<br>";
+                    echo $stad_naam . "<br>";
                 }
                 else {
                     echo '<p>Geen adres beschikbaar</p>';
