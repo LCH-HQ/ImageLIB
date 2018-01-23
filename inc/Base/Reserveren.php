@@ -154,53 +154,57 @@ class Reserveren extends BaseController
 				$datum_sql_ruimte = $datum_sql[$aantalRows]['post_id'];
 			}
 
+            $post_sql_ruimte = [];
 			for( $aantalRows = 0 ; $aantalRows < count($post_sql) ; $aantalRows++ ) {
-				$post_sql_ruimte = $post_sql[$aantalRows]['ID'];
+				$post_sql_ruimte[] = $post_sql[$aantalRows]['ID'];
 			}
+            for( $aantalRows = 0 ; $aantalRows < count($post_sql_ruimte); $aantalRows++) {
+                if( $tijden_sql_ruimte == $datum_sql_ruimte && $datum_sql_ruimte == $post_sql_ruimte[$aantalRows] ) {
+                    $table_meta = $wpdb->prefix . "postmeta";
+                    $table_posts = $wpdb->prefix . "posts";
+                    // $filter_sql = $wpdb->get_results("SELECT * FROM $table_meta WHERE post_id = '$post_sql_ruimte'", ARRAY_A);
+                    // $filter_naam_sql = $wpdb->get_results("SELECT post_title FROM $table_posts WHERE ID = '$post_sql_ruimte'", ARRAY_A);
+                    
+                    
+                    $stad_sql = $wpdb->get_results(
+                                                   "SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte[$aantalRows]' AND meta_key = 'stad'",
+                                                   ARRAY_A );
+                    $adres_sql = $wpdb->get_results(
+                                                    "SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte[$aantalRows]' AND meta_key = 'adres'",
+                                                    ARRAY_A );
+                    $begindatum_sql = $wpdb->get_results(
+                                                         "SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte[$aantalRows]' AND meta_key = 'begindatum'",
+                                                         ARRAY_A );
+                    $einddatum_sql = $wpdb->get_results(
+                                                        "SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte[$aantalRows]' AND meta_key = 'einddatum'",
+                                                        ARRAY_A );
+                    $begintijd_sql = $wpdb->get_results(
+                                                        "SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte[$aantalRows]' AND meta_key = 'begintijd'",
+                                                        ARRAY_A );
+                    $eindtijd_sql = $wpdb->get_results(
+                                                       "SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte[$aantalRows]' AND meta_key = 'eindtijd'",
+                                                       ARRAY_A );
+                    $hele_jaar_beschikbaar_sql = $wpdb->get_results(
+                                                                    "SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte[$aantalRows]' AND meta_key = 'hele_jaar_beschikbaar'",
+                                                                    ARRAY_A );
+                    $televisie_sql = $wpdb->get_results(
+                                                        "SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte[$aantalRows]' AND meta_key = 'televisie'",
+                                                        ARRAY_A );
+                    $beamer_sql = $wpdb->get_results(
+                                                     "SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte[$aantalRows]' AND meta_key = 'beamer'",
+                                                     ARRAY_A );
+                    $whiteboard_sql = $wpdb->get_results(
+                                                         "SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte[$aantalRows]' AND meta_key = 'whiteboard'",
+                                                         ARRAY_A );
+                    $anders_sql = $wpdb->get_results(
+                                                     "SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte[$aantalRows]' AND meta_key = 'anders'",
+                                                     ARRAY_A );
+            //}
+			
 
-			if( $tijden_sql_ruimte == $datum_sql_ruimte && $datum_sql_ruimte == $post_sql_ruimte ) {
-				$table_meta = $wpdb->prefix . "postmeta";
-				$table_posts = $wpdb->prefix . "posts";
-				// $filter_sql = $wpdb->get_results("SELECT * FROM $table_meta WHERE post_id = '$post_sql_ruimte'", ARRAY_A);
-				// $filter_naam_sql = $wpdb->get_results("SELECT post_title FROM $table_posts WHERE ID = '$post_sql_ruimte'", ARRAY_A);
-
-
-			$stad_sql = $wpdb->get_results( 
-	        	"SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte' AND meta_key = 'stad'", 
-	        	ARRAY_A );
-	        $adres_sql = $wpdb->get_results( 
-	        	"SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte' AND meta_key = 'adres'", 
-	        	ARRAY_A );
-		    $begindatum_sql = $wpdb->get_results( 
-	        	"SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte' AND meta_key = 'begindatum'", 
-	        	ARRAY_A );
-	        $einddatum_sql = $wpdb->get_results( 
-	        	"SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte' AND meta_key = 'einddatum'", 
-	        	ARRAY_A );
-	        $begintijd_sql = $wpdb->get_results( 
-	        	"SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte' AND meta_key = 'begintijd'", 
-	        	ARRAY_A );
-	        $eindtijd_sql = $wpdb->get_results( 
-	        	"SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte' AND meta_key = 'eindtijd'", 
-	        	ARRAY_A );
-	        $hele_jaar_beschikbaar_sql = $wpdb->get_results( 
-	        	"SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte' AND meta_key = 'hele_jaar_beschikbaar'",
-	        	ARRAY_A );
-	        $televisie_sql = $wpdb->get_results( 
-	        	"SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte' AND meta_key = 'televisie'", 
-	        	ARRAY_A );
-	        $beamer_sql = $wpdb->get_results( 
-	        	"SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte' AND meta_key = 'beamer'", 
-	        	ARRAY_A );
-	        $whiteboard_sql = $wpdb->get_results( 
-	        	"SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte' AND meta_key = 'whiteboard'", 
-	        	ARRAY_A );
-	        $anders_sql = $wpdb->get_results( 
-	        	"SELECT meta_value FROM $table_meta WHERE post_id = '$post_sql_ruimte' AND meta_key = 'anders'", 
-	        	ARRAY_A );
-
-				for( $aantalRows = 0 ; $aantalRows < count($post_sql) ; $aantalRows++ ) {
-
+                
+				//for( $aantalRows = 0 ; $aantalRows < count($post_sql) ; $aantalRows++ ) {
+                    
 					if ( isset($stad_sql[0]) && isset($adres_sql[0]) ) {
 						$stad_sql = array_shift($stad_sql);
 						$adres_sql = array_shift($adres_sql);
