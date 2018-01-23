@@ -171,7 +171,7 @@ class Reserveren extends BaseController
             print("tijden_sql" . $tijden_sql_ruimte[$aantalRows] . "<br>");
             print("datum_sql" . $datum_sql_ruimte[$aantalRows] . "<br>");
             print("post_sql" . $post_sql_ruimte[$aantalRows] . "<br>");
-            if( in_array($datum_sql_ruimte[$aantalRows], $tijden_sql_ruimte ) && in_array( $post_sql_ruimte, $datum_sql_ruimte[$aantalRows] ) ) {
+            if( in_array($datum_sql_ruimte[$aantalRows], $tijden_sql_ruimte ) && in_array( $post_sql_ruimte[$aantalRows], $datum_sql_ruimte ) ) {
                 $table_meta = $wpdb->prefix . "postmeta";
                 $table_posts = $wpdb->prefix . "posts";
                 // $filter_sql = $wpdb->get_results("SELECT * FROM $table_meta WHERE post_id = '$post_sql_ruimte'", ARRAY_A);
