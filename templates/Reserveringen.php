@@ -31,7 +31,7 @@ if (!empty($_POST['annuleer'])) {
 if (!empty($_POST['term'])) {
 	global $wpdb;
 	$term = $_POST['term'];
-	$results = $wpdb->get_results($wpdb->prepare( "SELECT * FROM wp_gereserveerd WHERE email LIKE %s", "%".$term."%"));
+	$results = $wpdb->get_results($wpdb->prepare( "SELECT * FROM wp_gereserveerd WHERE studentennummer LIKE %s", "%".$term."%"));
 	foreach ($results as $result) { ?>
 		<div class="reserveringen_wrap">
 			<h3>Reserveringsnummer:</h3>
