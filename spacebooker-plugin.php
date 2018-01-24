@@ -8,7 +8,7 @@
 Plugin Name: SpaceBooker
 Plugin URI:
 Description: Een plug-in waarmee je gemakkelijk ruimtes kunt boeken.
-Version: 0.9
+Version: 1.0
 Author: Lenin Chipantiza, Jim Kraan, Jeffry Pas
 Author URI:
 License: GPLv2 or later
